@@ -152,53 +152,6 @@ For more details about the parameters and settings of the package see:
 
 \hyperref[http://wiki.ros.org/hector_mapping]{http://wiki.ros.org/hector\_mapping}
 
-\subsubsection{Record a map}
-
-To build a new map, you should obviously not have loaded the old one. That is why you only need to run the hardware and odom launch files (and not the move\_base one). The hardware file will allow to run all the devices of the car and the odometry one include the hector\_mapping node which we will use.
-
-Once this nodes are running you can start recording the laser scanner data with a new terminal.
-
-\shellcmd{rosbag record -O name\_of\_your\_bag /scan /tf} \\
-
-If you look at this command line in details, it means you are recording all the data from the topics /scan (the laser scanner) and /tf (the transformation, see the section \refsec{tas_package_transformations}). The data will be saved in a .bag file. By default it is placed in your home directory.
-
-Additionnally you can see the map building process in real time with Rviz(recommended to see if there is any errors). And now you can run around with the car to build your own map !
-
-\subsubsection{Save your map and plug it in the TAS project}
-
-The bag file you just created is literally a bag of data, it is not a map yet. You need to assemble this data into a map. In this tutorial you will see how to simulate this data while a ROS node (gmapping) is building it into a map using a SLAM algorithm. In order to do that close every processes you have launched and run roscore by simply typing it in a new terminal. That way you avoid any conflicting topics.
-
-First you need to open a new terminal and reset the simulation time.
-
-\shellcmd{rosparam set use\_sim\_time true}
-
-Then run the gmapping node:
-
-\shellcmd{rosrun gmapping slam\_gmapping scan:=scan}
-
-Now simulate the data in a new terminal:
-
-\shellcmd{rosbag play --clock name\_of\_your\_bag.bag}
-
-Wait for the end of the process and record it:
-
-\shellcmd{rosrun map\_server map\_saver}
-
-You can also save the map with the name you want by using \shellcmd{rosrun map\_server map\_saver -f name\_of\_your\_map} instea of the previous command.
-
-
-The tutorial is also explained at this address.
-
-\hyperref[http://wiki.ros.org/slam_gmapping/Tutorials/MappingFromLoggedData]{http://wiki.ros.org/slam\_gmapping/Tutorials/MappingFromLoggedData}
-
-Your map is now saved in your home directory with two files (.pgm and .yaml)
-
-In order to use it in the TAS package, the two map files need to be in the folder catkins\_ws/src/tas\_group\_X/tas/launch/config/map\_server. Then the move\_base.launch file should be modified so it could refer to the new map.
-
-If you run run\_rviz.launch file (see the navigation section), you should see your new map.
-
-
-
 \section{Transformations}
 \label{sec:tas_package_transformations}
 
@@ -253,7 +206,7 @@ At the beginning you have to give an initial estimation of the position to the \
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[width=\textwidth]{rviz_estimation}
+		\includegraphics[width=\textwidth]{Navigate2}
 	\caption{RVIZ visualization tool}
 	\label{fig:rviz_estimation}
 \end{figure}

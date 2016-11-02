@@ -21,21 +21,24 @@
 \contentsline {subsection}{\numberline {3.2.5}xsens\_driver}{13}{subsection.3.2.5}
 \contentsline {section}{\numberline {3.3}TAS-Odometry}{14}{section.3.3}
 \contentsline {subsection}{\numberline {3.3.1}hector\_mapping}{14}{subsection.3.3.1}
-\contentsline {subsubsection}{\nonumberline Record a map}{15}{section*.19}
-\contentsline {subsubsection}{\nonumberline Save your map and plug it in the TAS project}{16}{section*.20}
-\contentsline {section}{\numberline {3.4}Transformations}{17}{section.3.4}
-\contentsline {section}{\numberline {3.5}Navigation}{18}{section.3.5}
-\contentsline {subsection}{\numberline {3.5.1}map\_server}{19}{subsection.3.5.1}
-\contentsline {subsection}{\numberline {3.5.2}amcl}{19}{subsection.3.5.2}
-\contentsline {subsection}{\numberline {3.5.3}move\_base}{20}{subsection.3.5.3}
-\contentsline {subsection}{\numberline {3.5.4}tas\_autonomous\_control}{20}{subsection.3.5.4}
+\contentsline {section}{\numberline {3.4}Transformations}{15}{section.3.4}
+\contentsline {section}{\numberline {3.5}Navigation}{17}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}map\_server}{18}{subsection.3.5.1}
+\contentsline {subsection}{\numberline {3.5.2}amcl}{18}{subsection.3.5.2}
+\contentsline {subsection}{\numberline {3.5.3}move\_base}{19}{subsection.3.5.3}
+\contentsline {subsection}{\numberline {3.5.4}tas\_autonomous\_control}{19}{subsection.3.5.4}
 \contentsline {chapter}{\numberline {4}Additional topics}{21}{chapter.4}
-\contentsline {section}{\numberline {4.1}Shell scripts}{21}{section.4.1}
-\contentsline {section}{\numberline {4.2}External RVIZ}{21}{section.4.2}
-\contentsline {section}{\numberline {4.3}VNC}{21}{section.4.3}
-\contentsline {section}{\numberline {4.4}Recording and playing data}{21}{section.4.4}
-\contentsline {section}{\numberline {4.5}Integrated Development Environments (IDE's)}{21}{section.4.5}
-\contentsline {section}{\numberline {4.6}Version control with git}{21}{section.4.6}
-\contentsline {section}{\numberline {4.7}Arduino code}{21}{section.4.7}
-\contentsline {section}{\numberline {4.8}Switching remote controller}{21}{section.4.8}
-\contentsline {chapter}{\nonumberline Bibliography}{22}{appendix*.24}
+\contentsline {section}{\numberline {4.1}Having a screen display}{21}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Create a wifi hotspot on the car}{21}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Connect to the car}{22}{subsection.4.1.2}
+\contentsline {subsubsection}{\nonumberline Using SSH}{22}{section*.22}
+\contentsline {subsubsection}{\nonumberline Using Teamviewer}{22}{section*.23}
+\contentsline {section}{\numberline {4.2}Recording and playing data, building your own map}{24}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Record a map}{24}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Save your map and plug it in the TAS project}{24}{subsection.4.2.2}
+\contentsline {section}{\numberline {4.3}Version control with git}{25}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Import your working repository}{25}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Updating your local repository}{25}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Updating your online repository}{26}{subsection.4.3.3}
+\contentsline {section}{\numberline {4.4}Switching remote controller}{26}{section.4.4}
+\contentsline {section}{\numberline {4.5}Recharging batteries}{26}{section.4.5}

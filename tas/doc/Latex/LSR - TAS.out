@@ -27,13 +27,15 @@
 \BOOKMARK [2][-]{subsection.3.5.3}{3.5.3 move\137base}{section.3.5}% 27
 \BOOKMARK [2][-]{subsection.3.5.4}{3.5.4 tas\137autonomous\137control}{section.3.5}% 28
 \BOOKMARK [0][-]{chapter.4}{4 Additional topics}{}% 29
-\BOOKMARK [1][-]{section.4.1}{4.1 Shell scripts}{chapter.4}% 30
-\BOOKMARK [1][-]{section.4.2}{4.2 External RVIZ}{chapter.4}% 31
-\BOOKMARK [1][-]{section.4.3}{4.3 VNC}{chapter.4}% 32
-\BOOKMARK [1][-]{section.4.4}{4.4 Recording and playing data}{chapter.4}% 33
-\BOOKMARK [1][-]{section.4.5}{4.5 Integrated Development Environments \(IDE's\)}{chapter.4}% 34
-\BOOKMARK [1][-]{section.4.6}{4.6 Version control with git}{chapter.4}% 35
-\BOOKMARK [1][-]{section.4.7}{4.7 Arduino code}{chapter.4}% 36
-\BOOKMARK [1][-]{section.4.8}{4.8 Switching remote controller}{chapter.4}% 37
-\BOOKMARK [0][-]{appendix*.24}{Bibliography}{}% 38
-\BOOKMARK [0][-]{tod.0}{To Do:}{}% 39
+\BOOKMARK [1][-]{section.4.1}{4.1 Having a screen display}{chapter.4}% 30
+\BOOKMARK [2][-]{subsection.4.1.1}{4.1.1 Create a wifi hotspot on the car}{section.4.1}% 31
+\BOOKMARK [2][-]{subsection.4.1.2}{4.1.2 Connect to the car}{section.4.1}% 32
+\BOOKMARK [1][-]{section.4.2}{4.2 Recording and playing data, building your own map}{chapter.4}% 33
+\BOOKMARK [2][-]{subsection.4.2.1}{4.2.1 Record a map}{section.4.2}% 34
+\BOOKMARK [2][-]{subsection.4.2.2}{4.2.2 Save your map and plug it in the TAS project}{section.4.2}% 35
+\BOOKMARK [1][-]{section.4.3}{4.3 Version control with git}{chapter.4}% 36
+\BOOKMARK [2][-]{subsection.4.3.1}{4.3.1 Import your working repository}{section.4.3}% 37
+\BOOKMARK [2][-]{subsection.4.3.2}{4.3.2 Updating your local repository}{section.4.3}% 38
+\BOOKMARK [2][-]{subsection.4.3.3}{4.3.3 Updating your online repository}{section.4.3}% 39
+\BOOKMARK [1][-]{section.4.4}{4.4 Switching remote controller}{chapter.4}% 40
+\BOOKMARK [1][-]{section.4.5}{4.5 Recharging batteries}{chapter.4}% 41
