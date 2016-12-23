@@ -5,7 +5,7 @@
   <param name="/use_sim_time" value="false"/>
   
   <!-- Run map server  -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find tas)/launch/config/map_server/LSR_N8.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find tas)/launch/config/map_server/tas_map_1.yaml"/>
 
    <!-- Run AMCL -->
   <node pkg="amcl" type="amcl" name="amcl" respawn="true">
@@ -44,7 +44,7 @@
 
 	  <!-- Laser model parameters-->
 	  <param name="laser_min_range" value="0.01"/>	<!-- changed -->
-	  <param name="laser_max_range" value="10.0"/> 	<!-- changed -->
+	  <param name="laser_max_range" value="3.0"/> 	<!-- changed -->
 	  <param name="laser_max_beams" value="30"/>
 	  <param name="laser_z_hit" value="0.95"/>
 	  <param name="laser_z_short" value="0.1"/>
