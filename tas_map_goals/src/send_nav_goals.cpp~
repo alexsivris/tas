@@ -13,8 +13,13 @@ void NavGoals::initWaypoints()
     m_poseArray.poses.clear();
     m_poseArray.header.frame_id="map";
     // 1 //
+<<<<<<< HEAD
     waypoint.position.x = 4.9;
     waypoint.position.y = -1.7;
+=======
+    waypoint.position.x = -7.0;
+    waypoint.position.y = 18.75;
+>>>>>>> a361f778568db72b627e6af2f57d38b25d648a1c
     waypoint.position.z = 0.000;
     waypoint.orientation.x = 0.000;
     waypoint.orientation.y = 0.000;
@@ -24,18 +29,23 @@ void NavGoals::initWaypoints()
     m_poseArray.poses.push_back(waypoint);
 
     // 2 //
+<<<<<<< HEAD
     waypoint.position.x = 6.5;
     waypoint.position.y = -6.8;
+=======
+    waypoint.position.x = -7.6;
+    waypoint.position.y = 12.8;
     waypoint.position.z = 0.000;
     waypoint.orientation.x = 0.000;
     waypoint.orientation.y = 0.000;
-    waypoint.orientation.z = 0;
-    waypoint.orientation.w = 1;
+    waypoint.orientation.z = -sqrt(0.5);
+    waypoint.orientation.w = sqrt(0.5);
     waypoints.push_back(waypoint);
     m_poseArray.poses.push_back(waypoint);
     // 3 //
-    waypoint.position.x = 10.4;
-    waypoint.position.y = -7;
+    waypoint.position.x = -8.0;
+    waypoint.position.y = 5.7;
+>>>>>>> a361f778568db72b627e6af2f57d38b25d648a1c
     waypoint.position.z = 0.000;
     waypoint.orientation.x = 0.000;
     waypoint.orientation.y = 0.000;
@@ -43,7 +53,94 @@ void NavGoals::initWaypoints()
     waypoint.orientation.w = 1;
     waypoints.push_back(waypoint);
     m_poseArray.poses.push_back(waypoint);
+<<<<<<< HEAD
+    // 3 //
+    waypoint.position.x = 10.4;
+    waypoint.position.y = -7;
+=======
+    // 4 //
+    waypoint.position.x = -4.2;
+    waypoint.position.y = 5.6;
+>>>>>>> a361f778568db72b627e6af2f57d38b25d648a1c
+    waypoint.position.z = 0.000;
+    waypoint.orientation.x = 0.000;
+    waypoint.orientation.y = 0.000;
+    waypoint.orientation.z = 0;
+    waypoint.orientation.w = 1;
+    waypoints.push_back(waypoint);
+    m_poseArray.poses.push_back(waypoint);
+<<<<<<< HEAD
    
+=======
+    // 5 //
+    waypoint.position.x = 3.9;
+    waypoint.position.y = 4.3;
+    waypoint.position.z = 0.000;
+    waypoint.orientation.x = 0.000;
+    waypoint.orientation.y = 0.000;
+    waypoint.orientation.z = -sqrt(0.5);
+    waypoint.orientation.w = sqrt(0.5);
+    waypoints.push_back(waypoint);
+    m_poseArray.poses.push_back(waypoint);
+    // 6 //
+    waypoint.position.x = 3.2;
+    waypoint.position.y = 0;
+    waypoint.position.z = 0.000;
+    waypoint.orientation.x = 0.000;
+    waypoint.orientation.y = 0.000;
+    waypoint.orientation.z = 1;
+    waypoint.orientation.w = 0;
+    waypoints.push_back(waypoint);
+    m_poseArray.poses.push_back(waypoint);
+    // 7 //
+    waypoint.position.x = -3;
+    waypoint.position.y = 0.6;
+    waypoint.position.z = 0.000;
+    waypoint.orientation.x = 0.000;
+    waypoint.orientation.y = 0.000;
+    waypoint.orientation.z = 1;
+    waypoint.orientation.w = 0;
+    waypoints.push_back(waypoint);
+    m_poseArray.poses.push_back(waypoint);
+    // 8 //
+    waypoint.position.x = -5.6;
+    waypoint.position.y = 3.4;
+    waypoint.position.z = 0.000;
+    waypoint.orientation.x = 0.000;
+    waypoint.orientation.y = 0.000;
+    waypoint.orientation.z = sqrt(0.5);
+    waypoint.orientation.w = sqrt(0.5);
+    waypoints.push_back(waypoint);
+    m_poseArray.poses.push_back(waypoint);
+    // 9 //
+    waypoint.position.x = -2.6;
+    waypoint.position.y = 5.3;
+    waypoint.position.z = 0.000;
+    waypoint.orientation.x = 0.000;
+    waypoint.orientation.y = 0.000;
+    waypoint.orientation.z = 0;
+    waypoint.orientation.w = 1;
+    waypoints.push_back(waypoint);
+    m_poseArray.poses.push_back(waypoint);
+    // 10 //
+    waypoint.position.x = 6.6;
+    waypoint.position.y = 4.9;
+    waypoint.position.z = 0.000;
+    waypoint.orientation.x = 0.000;
+    waypoint.orientation.y = 0.000;
+    waypoint.orientation.z = sqrt(0.5);
+    waypoint.orientation.w = sqrt(0.5);
+    waypoints.push_back(waypoint);
+    m_poseArray.poses.push_back(waypoint);
+    // 11 //
+    waypoint.position.x = 6.8;
+    waypoint.position.y = 11.9;
+    waypoint.position.z = 0.000;
+    waypoint.orientation.x = 0.000;
+    waypoint.orientation.y = 0.000;
+    waypoint.orientation.z = sqrt(0.5);
+    waypoint.orientation.w = sqrt(0.5);
+>>>>>>> a361f778568db72b627e6af2f57d38b25d648a1c
     waypoints.push_back(waypoint);
     m_poseArray.poses.push_back(waypoint);
 
@@ -57,8 +154,19 @@ void NavGoals::startGoalsProcess()
     ros::Rate loop_rate(10);
     while(ros::ok())
     {
+<<<<<<< HEAD
         // SEND GOALS HERE
         sendGoals();
+=======
+        // just for rviz visualization
+        publishWaypoints();
+
+        // SEND GOALS HERE
+
+        ROS_INFO("published waypoints!");
+
+
+>>>>>>> a361f778568db72b627e6af2f57d38b25d648a1c
         ros::spinOnce();
         loop_rate.sleep();
     }
@@ -76,9 +184,12 @@ void NavGoals::sendGoals()
     while (!ac.waitForServer(ros::Duration(5.0))) { // wait for the action server to come up
         ROS_INFO("Waiting for the move_base action server to come up");
     }
+<<<<<<< HEAD
 	// just for rviz visualization
         publishWaypoints();
         ROS_INFO("published waypoints!");
+=======
+>>>>>>> a361f778568db72b627e6af2f57d38b25d648a1c
 
     move_base_msgs::MoveBaseGoal goal;
     goal.target_pose.header.frame_id = "map"; // set target pose frame of coordinates
@@ -118,9 +229,13 @@ void NavGoals::activeCb() {
  * Callback function, called every time feedback is received for the goal
  */
 void NavGoals::feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback) {
+<<<<<<< HEAD
     /*ROS_INFO("[X]:%f [Y]:%f [W]: %f [Z]: %f", feedback->base_position.pose.position.x,feedback->base_position.pose.position.y,feedback->base_position.pose.orientation.w, feedback->base_position.pose.orientation.z);
 */
 
 
+=======
+    ROS_INFO("[X]:%f [Y]:%f [W]: %f [Z]: %f", feedback->base_position.pose.position.x,feedback->base_position.pose.position.y,feedback->base_position.pose.orientation.w, feedback->base_position.pose.orientation.z);
+>>>>>>> a361f778568db72b627e6af2f57d38b25d648a1c
 }
 

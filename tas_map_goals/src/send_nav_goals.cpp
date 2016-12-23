@@ -33,6 +33,8 @@ void NavGoals::initWaypoints()
     waypoint.orientation.w = 1;
     waypoints.push_back(waypoint);
     m_poseArray.poses.push_back(waypoint);
+
+
     // 3 //
     waypoint.position.x = 10.4;
     waypoint.position.y = -7;
@@ -43,7 +45,6 @@ void NavGoals::initWaypoints()
     waypoint.orientation.w = 1;
     waypoints.push_back(waypoint);
     m_poseArray.poses.push_back(waypoint);
-   
     waypoints.push_back(waypoint);
     m_poseArray.poses.push_back(waypoint);
 
@@ -76,9 +77,11 @@ void NavGoals::sendGoals()
     while (!ac.waitForServer(ros::Duration(5.0))) { // wait for the action server to come up
         ROS_INFO("Waiting for the move_base action server to come up");
     }
+
 	// just for rviz visualization
         publishWaypoints();
         ROS_INFO("published waypoints!");
+
 
     move_base_msgs::MoveBaseGoal goal;
     goal.target_pose.header.frame_id = "map"; // set target pose frame of coordinates
@@ -118,9 +121,9 @@ void NavGoals::activeCb() {
  * Callback function, called every time feedback is received for the goal
  */
 void NavGoals::feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback) {
+
     /*ROS_INFO("[X]:%f [Y]:%f [W]: %f [Z]: %f", feedback->base_position.pose.position.x,feedback->base_position.pose.position.y,feedback->base_position.pose.orientation.w, feedback->base_position.pose.orientation.z);
 */
-
 
 }
 

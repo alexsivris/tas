@@ -7,5 +7,6 @@ int main(int argc, char** argv){
     // send navigation goals
     NavGoals ng(ac);
     ng.startGoalsProcess();
+
     return 0;
 }
