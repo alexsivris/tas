@@ -130,7 +130,7 @@ include_directories(
 # add_dependencies(tas_map_goals ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(tas_map_goals_node src/main.cpp src/send_nav_goals.cpp)
+add_executable(tas_map_goals_node src/main.cpp src/send_nav_goals.cpp src/XMLPoses.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
