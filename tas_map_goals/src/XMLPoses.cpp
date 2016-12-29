@@ -8,14 +8,17 @@ XMLPoses::XMLPoses(string &_filename, string &_frameid, ros::NodeHandle &_nh) :
     if (m_frameId.empty())
         m_frameId = "/nav_origin";
 
-    cout << "Your file " <<  m_fileName << endl;
-    //TODO TRY-CATCH EXCEPTION
-    bool ret = loadXmlFile();
-    if (ret)
-    {
-        m_xmlRootNode = m_xmlDoc.first_node("poses");
-        fetchXmlDom();
+    cout << "Filename: " <<  m_fileName << endl;
+
+    try {
+        loadXmlFile();
+    } catch(string e) {
+        ROS_ERROR("%s",e.c_str());
     }
+
+    m_xmlRootNode = m_xmlDoc.first_node("poses");
+    fetchXmlDom();
+
 }
 
 void XMLPoses::getWaypoints(geometry_msgs::PoseArray &_posearray, vector<geometry_msgs::Pose> &_waypoints)
@@ -65,8 +68,7 @@ void XMLPoses::fetchXmlDom()
     }
 }
 
-// TODO: EXCEPTION HANDLING
-bool XMLPoses::loadXmlFile()
+void XMLPoses::loadXmlFile()
 {
     ifstream theFile (m_fileName);
     if (theFile)
@@ -75,11 +77,9 @@ bool XMLPoses::loadXmlFile()
         vecBuffer.push_back('\0');
         m_xmlDoc.parse<0>(&vecBuffer[0]);
         ROS_INFO("Successfully loaded %s", m_fileName.c_str());
-        return true;
     }
     else
     {
-        ROS_ERROR("XMLPoses: Something went wrong with accessing the file: %s", m_fileName.c_str());
-        return false;
+        throw "XMLPoses: Something went wrong with accessing the XML-file.";
     }
 }

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <stdexcept>
 #include "rapidxml/rapidxml.hpp"
 
 #include <geometry_msgs/PoseArray.h>
@@ -20,7 +21,7 @@ public:
     void getWaypoints(geometry_msgs::PoseArray &_posearray, vector<geometry_msgs::Pose> &_waypoints);
 
 private:
-    bool loadXmlFile();
+    void loadXmlFile();
     void fetchXmlDom();
 
     geometry_msgs::PoseArray m_poseArray;
