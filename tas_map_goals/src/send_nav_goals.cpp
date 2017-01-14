@@ -1,96 +1,86 @@
 #include "send_nav_goals.h"
 
-NavGoals::NavGoals(MoveBaseClient &_ac) :
-    ac(_ac)
+NavGoals::NavGoals(MoveBaseClient &_ac, ros::NodeHandle & _nh, string &_filename, string &_frameid) :
+    ac(_ac), m_nh(_nh), m_fileName(_filename), m_frameId(_frameid)
 {
     m_pubWaypoints = m_nh.advertise<geometry_msgs::PoseArray>("tas_nav_goals",15);
+    m_pubMarkers = m_nh.advertise<visualization_msgs::Marker>("waypoint_markers",1);
     //some init
-    initWaypoints();
+    m_xml = new XMLPoses(m_fileName, m_frameId, m_nh);
+    m_xml->getWaypoints(m_poseArray, waypoints);
+    ROS_INFO("%s", m_frameId.c_str());
 }
-void NavGoals::initWaypoints()
-{
-    geometry_msgs::Pose waypoint;
-    m_poseArray.poses.clear();
-    m_poseArray.header.frame_id="map";
-    // 1 //
-    waypoint.position.x = 4.9;
-    waypoint.position.y = -1.7;
-    waypoint.position.z = 0.000;
-    waypoint.orientation.x = 0.000;
-    waypoint.orientation.y = 0.000;
-    waypoint.orientation.z = -sqrt(0.5);
-    waypoint.orientation.w = sqrt(0.5);
-    waypoints.push_back(waypoint);
-    m_poseArray.poses.push_back(waypoint);
-
-    // 2 //
-    waypoint.position.x = 6.5;
-    waypoint.position.y = -6.8;
-    waypoint.position.z = 0.000;
-    waypoint.orientation.x = 0.000;
-    waypoint.orientation.y = 0.000;
-    waypoint.orientation.z = 0;
-    waypoint.orientation.w = 1;
-    waypoints.push_back(waypoint);
-    m_poseArray.poses.push_back(waypoint);
-
-
-    // 3 //
-    waypoint.position.x = 10.4;
-    waypoint.position.y = -7;
-    waypoint.position.z = 0.000;
-    waypoint.orientation.x = 0.000;
-    waypoint.orientation.y = 0.000;
-    waypoint.orientation.z = 0;
-    waypoint.orientation.w = 1;
-    waypoints.push_back(waypoint);
-    m_poseArray.poses.push_back(waypoint);
-    waypoints.push_back(waypoint);
-    m_poseArray.poses.push_back(waypoint);
-
-}
-
-/******/
-
 
 void NavGoals::startGoalsProcess()
 {
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(5);
     while(ros::ok())
     {
         // SEND GOALS HERE
-        sendGoals();
+        //sendGoals();
+        prepareMarkers();
+        publishWaypoints();
         ros::spinOnce();
         loop_rate.sleep();
     }
 }
+// markers for waypoints
+void NavGoals::prepareMarkers()
+{
+    m_marker.header.frame_id = m_frameId;
+    uint32_t shape = visualization_msgs::Marker::TEXT_VIEW_FACING;
+    for (auto i=0;i<waypoints.size(); i++)
+    {
+        m_marker.header.stamp = ros::Time::now();
+        m_marker.ns = "wp_markers";
+        m_marker.id = i;
+        m_marker.type = shape;
+        m_marker.action = visualization_msgs::Marker::ADD;
+        m_marker.pose = waypoints.at(i);
+        stringstream conv;
+        conv << i+1;
+        m_marker.text = conv.str();
+        m_marker.scale.x = 1.0;
+        m_marker.scale.y = 1.0;
+        m_marker.scale.z = 1.0;
+
+        m_marker.color.r = 0.0f;
+        m_marker.color.g = 1.0f;
+        m_marker.color.b = 0.0f;
+        m_marker.color.a = 1.0;
+
+        m_marker.lifetime = ros::Duration(); // never auto-delete
+        m_pubMarkers.publish(m_marker);
+
+    }
+
+
+}
+
 // publish waypoints to tas_nav_goals
 void NavGoals::publishWaypoints()
 {
     m_poseArray.header.stamp = ros::Time::now();
-
     m_pubWaypoints.publish(m_poseArray);
+
 }
 
 void NavGoals::sendGoals()
 {
-    while (!ac.waitForServer(ros::Duration(5.0))) { // wait for the action server to come up
+    while (!ac.waitForServer(ros::Duration(5.0))) {
         ROS_INFO("Waiting for the move_base action server to come up");
     }
 
-	// just for rviz visualization
-        publishWaypoints();
-        ROS_INFO("published waypoints!");
-
+    publishWaypoints();
 
     move_base_msgs::MoveBaseGoal goal;
-    goal.target_pose.header.frame_id = "map"; // set target pose frame of coordinates
-    for(int i = 0; i < waypoints.size(); ++i) { // loop over all goal points, point by point
-        goal.target_pose.header.stamp = ros::Time::now(); // set current time
+    goal.target_pose.header.frame_id = m_frameId;
+    for(int i = 0; i < waypoints.size(); ++i) {
+        goal.target_pose.header.stamp = ros::Time::now();
         goal.target_pose.pose = waypoints.at(i);
         ROS_INFO("Sending goal");
-        ac.sendGoal(goal, &doneCb, &activeCb, &feedbackCb); // send goal and register callback handler
-        ac.waitForResult(); // wait for goal result
+        ac.sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
+        ac.waitForResult();
 
         if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
             ROS_INFO("The base moved to %d goal", i);
@@ -101,8 +91,6 @@ void NavGoals::sendGoals()
 
 }
 
-
-// static methods
 /**
  * Callback function
  */

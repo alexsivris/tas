@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<poses>
+	<point name="point_1">
+		<coordinates>
+			<x>-0.0544085502625</x>
+			<y>0.0714597702026</y>
+			<z>0.0</z>
+		</coordinates>
+		<orientation>
+			<x>0.0</x>
+			<y>0.0</y>
+			<z>-0.737358032273</z>
+			<w>0.675502133411</w>
+		</orientation>
+	</point>
+	<point name="point_2">
+		<coordinates>
+			<x>-0.327541828156</x>
+			<y>-7.68667697906</y>
+			<z>0.0</z>
+		</coordinates>
+		<orientation>
+			<x>0.0</x>
+			<y>0.0</y>
+			<z>-0.717375641687</z>
+			<w>0.696686578537</w>
+		</orientation>
+	</point>
+	<point name="point_3">
+		<coordinates>
+			<x>-0.930115938187</x>
+			<y>-16.241481781</y>
+			<z>0.0</z>
+		</coordinates>
+		<orientation>
+			<x>0.0</x>
+			<y>0.0</y>
+			<z>-0.0744469890103</z>
+			<w>0.997224972525</w>
+		</orientation>
+	</point>
+	<point name="point_4">
+		<coordinates>
+			<x>11.3337287903</x>
+			<y>-19.5215110779</y>
+			<z>0.0</z>
+		</coordinates>
+		<orientation>
+			<x>0.0</x>
+			<y>0.0</y>
+			<z>-0.716951226222</z>
+			<w>0.697123331426</w>
+		</orientation>
+	</point>
+	<point name="point_5">
+		<coordinates>
+			<x>5.44483089447</x>
+			<y>-20.7878742218</y>
+			<z>0.0</z>
+		</coordinates>
+		<orientation>
+			<x>0.0</x>
+			<y>0.0</y>
+			<z>0.99410674311</z>
+			<w>0.108405642397</w>
+		</orientation>
+	</point>
+	<point name="point_6">
+		<coordinates>
+			<x>1.98264122009</x>
+			<y>-17.298412323</y>
+			<z>0.0</z>
+		</coordinates>
+		<orientation>
+			<x>0.0</x>
+			<y>0.0</y>
+			<z>0.594638059549</z>
+			<w>0.803993518715</w>
+		</orientation>
+	</point>
+	<point name="point_7">
+		<coordinates>
+			<x>9.36914539337</x>
+			<y>-17.1694488525</y>
+			<z>0.0</z>
+		</coordinates>
+		<orientation>
+			<x>0.0</x>
+			<y>0.0</y>
+			<z>-0.0150151446005</z>
+			<w>0.999887266362</w>
+		</orientation>
+	</point>
+	<point name="point_8">
+		<coordinates>
+			<x>14.0952787399</x>
+			<y>-10.8304958344</y>
+			<z>0.0</z>
+		</coordinates>
+		<orientation>
+			<x>0.0</x>
+			<y>0.0</y>
+			<z>0.714461372362</z>
+			<w>0.699674886931</w>
+		</orientation>
+	</point>
+</poses>

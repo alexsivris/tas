@@ -1,0 +1,6 @@
+<launch>
+	<node pkg="tas_map_goals" type="tas_map_goals_node" name="tas_map_goals_node">
+		<param name="xml_poses_filename" type="string" value="$(find tas_map_goals)/poses/poses.xml" />
+		<param name="xml_poses_frameid" type="string" value="/nav_origin" /> <!-- need TF for this -->
+	</node>
+</launch>
