@@ -8,6 +8,7 @@ add_definitions(-std=c++11)
 ## is used, also find other catkin packages
 
 find_package(catkin REQUIRED COMPONENTS
+  cmake_modules
   cv_bridge
   image_transport
   roscpp
@@ -15,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
 )
 find_package(OpenCV REQUIRED)
+find_package(Eigen REQUIRED)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -109,6 +111,7 @@ catkin_package(
 #  LIBRARIES visual_localization
 #  CATKIN_DEPENDS cv_bridge image_transport roscpp rospy std_msgs
 #  DEPENDS system_lib
+	DEPENDS Eigen
 )
 
 ###########
@@ -120,6 +123,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${Eigen_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -142,6 +146,7 @@ include_directories(
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(visual_localization_node
 #   ${catkin_LIBRARIES}
+#   ${Eigen_LIBRARIES}
 # )
 
 #############
