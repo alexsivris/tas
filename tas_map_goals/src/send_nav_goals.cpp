@@ -15,7 +15,7 @@ void NavGoals::startGoalsProcess()
     while(ros::ok())
     {
         // SEND GOALS HERE
-        //sendGoals();
+        sendGoals();
         publishWaypoints();
         ROS_INFO("published waypoints!");
         ros::spinOnce();
