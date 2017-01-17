@@ -17,9 +17,9 @@ void NavGoals::startGoalsProcess()
     while(ros::ok())
     {
         // SEND GOALS HERE
-        //sendGoals();
         prepareMarkers();
         publishWaypoints();
+        sendGoals();
         ros::spinOnce();
         loop_rate.sleep();
     }
@@ -67,11 +67,10 @@ void NavGoals::publishWaypoints()
 
 void NavGoals::sendGoals()
 {
+    publishWaypoints();
     while (!ac.waitForServer(ros::Duration(5.0))) {
         ROS_INFO("Waiting for the move_base action server to come up");
     }
-
-    publishWaypoints();
 
     move_base_msgs::MoveBaseGoal goal;
     goal.target_pose.header.frame_id = m_frameId;
