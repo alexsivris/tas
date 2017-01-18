@@ -3,8 +3,8 @@
 #include "src/visuallocalization.h"
 int main(int argc, char** argv){
     ros::init(argc, argv, "visual_localization_node");
-
-    VisualLocalization vl;
+    ros::NodeHandle nh;
+    VisualLocalization vl(nh);
 
     return 0;
 }
