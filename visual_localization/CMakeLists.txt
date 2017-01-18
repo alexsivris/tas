@@ -8,6 +8,7 @@ add_definitions(-std=c++11)
 ## is used, also find other catkin packages
 
 find_package(catkin REQUIRED COMPONENTS
+  tf
   cmake_modules
   cv_bridge
   image_transport
@@ -138,7 +139,7 @@ include_directories(
 
 ## Declare a C++ executable
 
-#add_executable(visual_localization_node src/visuallocalization.cpp src/visuallocalization.h main.cpp)
+add_executable(visual_localization_node src/visuallocalization.cpp src/visuallocalization.h main.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -146,10 +147,10 @@ include_directories(
 # add_dependencies(visual_localization_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(visual_localization_node
-#   ${catkin_LIBRARIES}
-#   ${Eigen_LIBRARIES}
-# )
+ target_link_libraries(visual_localization_node
+   ${catkin_LIBRARIES}
+   ${Eigen_LIBRARIES}
+ )
 
 #############
 ## Install ##
