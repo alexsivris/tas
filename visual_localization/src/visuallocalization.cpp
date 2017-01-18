@@ -43,10 +43,10 @@ void VisualLocalization::cbTplDetect(const geometry_msgs::PoseArray::ConstPtr &m
     // pxl points from Benni
     Vector3f pxlHom1, pxlHom2 ;
     double theta1=0, theta2=0;
-    pxlHom1(1) = 1;//m_tplInPixels.at(0).x = msg[0].poses.position.x
+    pxlHom1(1) = 1;//m_tplInPixels.at(0).x = msg[0].poses.position.x;
     pxlHom1(2) = 1;//m_tplInPixels.at(0).y = msg[0].poses.position.y;
     pxlHom1(3) = 1;
-    pxlHom2(1) = 1;//m_tplInPixels.at(1).x = msg[1].poses.position.x
+    pxlHom2(1) = 1;//m_tplInPixels.at(1).x = msg[1].poses.position.x;
     pxlHom2(2) = 1;//m_tplInPixels.at(1).y = msg[1].poses.position.y;
     pxlHom2(3) = 1;
     projectPixelToCamera(pxlHom1);
