@@ -1,7 +1,7 @@
 #include "visuallocalization.h"
 
 VisualLocalization::VisualLocalization(ros::NodeHandle _nh) :
-    m_nh(_nh)
+    m_nh(_nh), m_gotMap(false)
 {
     m_detectedTpl.clear();
     m_detectedTpl.resize(2);
@@ -11,8 +11,9 @@ VisualLocalization::VisualLocalization(ros::NodeHandle _nh) :
              0, 1.1123, 0.3601,
              0, 0, 0.0010;
     m_K = m_K * 1000;
-    m_subTplDetection = m_nh.subscribe("tpl_detect", 1, &VisualLocalization::cbTplDetect, this);
-    m_subMap = m_nh.subscribe("map",1,&VisualLocalization::cbMap, this);
+
+    m_subTplDetection = m_nh.subscribe("/tpl_detect", 1, &VisualLocalization::cbTplDetect, this); // FROM BENNI
+    m_subMap = m_nh.subscribe("/map_image/full",1,&VisualLocalization::cbMap, this);
 }
 void VisualLocalization::cbLaserScan(const sensor_msgs::LaserScan::ConstPtr &scan)
 {
@@ -27,13 +28,21 @@ void VisualLocalization::cbLaserScan(const sensor_msgs::LaserScan::ConstPtr &sca
     ros::spinOnce();
 }
 
-void VisualLocalization::cbMap(const nav_msgs::OccupancyGrid::ConstPtr &msg)
+void VisualLocalization::cbMap(const sensor_msgs::ImageConstPtr& msg) // hector_compressed_map_transport
 {
-    int width = msg->info.width;
-    int height = msg->info.height;
-    if ((width < 3) || (height < 3) ){
-          ROS_INFO("Map size is only x: %d,  y: %d . Not running map to image conversion", width, height);
-          return;
+    try {
+        cv_bridge::CvImageConstPtr imgPtr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+        if (imgPtr == NULL)
+        {
+            ROS_WARN("Received NULL image.");
+        }
+        m_mapImg = imgPtr->image;
+        locateLandmarks();
+    }
+    catch (cv_bridge::Exception &ex)
+    {
+        ROS_ERROR("cv_bridge exception: %s", ex.what());
+        exit(-1);
     }
     ros::spinOnce();
 }
@@ -50,10 +59,25 @@ void VisualLocalization::cbTplDetect(const geometry_msgs::PoseArray::ConstPtr &m
     pxlHom2(2) = 1;//m_tplInPixels.at(1).y = msg[1].poses.position.y;
     pxlHom2(3) = 1;
     projectPixelToCamera(pxlHom1);
-    m_detectedTpl.at(0).theta = convertPointToAngle(m_detectedTpl.at(0)); //
-    m_detectedTpl.at(1).theta = convertPointToAngle(m_detectedTpl.at(1)); //
+    m_detectedTpl.at(0).map_u = 2135; //can be found with ORB
+    m_detectedTpl.at(0).map_v = 1987;
+    m_detectedTpl.at(1).map_u = 2218;
+    m_detectedTpl.at(1).map_v = 2010;
+    for (auto it: m_detectedTpl)
+    {
+        it.theta = convertPointToAngle(it); //
+    }
     localizeCar();
     ros::spinOnce();
+}
+
+void VisualLocalization::locateLandmarks()
+{
+    if (!m_gotMap)
+    {
+        m_gotMap = true;
+
+    }
 }
 
 void VisualLocalization::localizeCar()

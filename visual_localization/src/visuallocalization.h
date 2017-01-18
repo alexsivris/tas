@@ -25,7 +25,8 @@ const double camToLaserResolution = laser_range/cam_fov; /// deg in cam fov -> d
 }
 
 struct TemplateData {
-    double u=0, v=0; /// in pixels
+    double u=0, v=0; /// in pixels [camera]
+    unsigned int map_u=0,map_v=0; /// in pixels [map]
     double x=0, y=0; /// in meters
     double theta=0; ///
     double distance=0;
@@ -52,8 +53,9 @@ private:
     void transformQuaternionToR();
     void broadcastCameraFrame();
     void localizeCar();
+    void locateLandmarks();
     void cbTplDetect(const geometry_msgs::PoseArray::ConstPtr &msg);
-    void cbMap(const nav_msgs::OccupancyGrid::ConstPtr &msg);
+    void cbMap(const sensor_msgs::ImageConstPtr& msg);
     void cbLaserScan(const sensor_msgs::LaserScan::ConstPtr &scan);
 
     // intrinsics
@@ -73,6 +75,10 @@ private:
     ros::NodeHandle &m_nh;
     ros::Subscriber m_subTplDetection;
     ros::Subscriber m_subMap;
+
+    cv::Mat m_mapImg;
+    bool m_gotMap;
+
 };
 
 #endif // VISUALLOCALIZATION_H
