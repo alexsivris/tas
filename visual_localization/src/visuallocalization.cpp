@@ -1,6 +1,6 @@
 #include "visuallocalization.h"
 
-VisualLocalization::VisualLocalization(ros::NodeHandle _nh) :
+VisualLocalization::VisualLocalization(ros::NodeHandle _nh, vector<string> &_lm_names) :
     m_nh(_nh), m_gotMap(false)
 {
     m_detectedTpl.clear();
@@ -12,6 +12,9 @@ VisualLocalization::VisualLocalization(ros::NodeHandle _nh) :
              0, 0, 0.0010;
     m_K = m_K * 1000;
 
+    m_landmarks.resize(2);
+    m_landmarks.at(0).src = imread(_lm_names.at(0),1);
+    m_landmarks.at(1).src = imread(_lm_names.at(1),1);
     m_subTplDetection = m_nh.subscribe("/tpl_detect", 1, &VisualLocalization::cbTplDetect, this); // FROM BENNI
     m_subMap = m_nh.subscribe("/map_image/full",1,&VisualLocalization::cbMap, this);
 }
@@ -37,7 +40,7 @@ void VisualLocalization::cbMap(const sensor_msgs::ImageConstPtr& msg) // hector_
             ROS_WARN("Received NULL image.");
         }
         m_mapImg = imgPtr->image;
-        locateLandmarks();
+        locateLandmarksInMap();
     }
     catch (cv_bridge::Exception &ex)
     {
@@ -71,11 +74,14 @@ void VisualLocalization::cbTplDetect(const geometry_msgs::PoseArray::ConstPtr &m
     ros::spinOnce();
 }
 
-void VisualLocalization::locateLandmarks()
+void VisualLocalization::locateLandmarksInMap()
 {
     if (!m_gotMap)
     {
         m_gotMap = true;
+        m_pLandmarkMatcher = new LandmarkMatcher(m_mapImg,m_landmarks);
+        cout << "center of tpl1 " << m_landmarks.at(0).center <<endl;
+        cout << "center of tpl2 " << m_landmarks.at(1).center <<endl;
 
     }
 }
