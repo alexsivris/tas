@@ -139,7 +139,11 @@ include_directories(
 
 ## Declare a C++ executable
 
-add_executable(visual_localization_node src/visuallocalization.cpp src/visuallocalization.h main.cpp)
+add_executable(visual_localization_node src/visuallocalization.cpp
+ src/visuallocalization.h
+src/landmarkmatcher.cpp
+src/landmarkmatcher.h
+src/my_types.h main.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
