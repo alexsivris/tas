@@ -149,6 +149,7 @@ visual_localization/src/landmarkmatcher.cpp
 visual_localization/src/landmarkmatcher.h
 visual_localization/src/my_types.h
  visual_localization/main.cpp)
+ 
 add_executable(map_goals map_goals/src/main.cpp
  map_goals/src/send_nav_goals.cpp 
  map_goals/src/XMLPoses.cpp)
