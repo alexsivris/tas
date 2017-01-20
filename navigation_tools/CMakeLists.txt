@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(visual_localization)
+project(navigation_tools)
 add_definitions(-std=c++11)
 
 
@@ -15,9 +15,12 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  actionlib
+  move_base_msgs
 )
 find_package(OpenCV REQUIRED)
 find_package(Eigen REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -123,6 +126,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
+	map_goals/include
   ${catkin_INCLUDE_DIRS}
   ${Eigen_INCLUDE_DIRS}
 )
@@ -139,21 +143,29 @@ include_directories(
 
 ## Declare a C++ executable
 
-add_executable(visual_localization_node src/visuallocalization.cpp
- src/visuallocalization.h
-src/landmarkmatcher.cpp
-src/landmarkmatcher.h
-src/my_types.h main.cpp)
+add_executable(visual_localization visual_localization/src/visuallocalization.cpp
+ visual_localization/src/visuallocalization.h
+visual_localization/src/landmarkmatcher.cpp
+visual_localization/src/landmarkmatcher.h
+visual_localization/src/my_types.h
+ visual_localization/main.cpp)
+add_executable(map_goals map_goals/src/main.cpp
+ map_goals/src/send_nav_goals.cpp 
+ map_goals/src/XMLPoses.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 
 # add_dependencies(visual_localization_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+ add_dependencies(map_goals ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(visual_localization_node
+ target_link_libraries(visual_localization
    ${catkin_LIBRARIES}
    ${Eigen_LIBRARIES}
+ )
+ target_link_libraries(map_goals
+   ${catkin_LIBRARIES}
  )
 
 #############
