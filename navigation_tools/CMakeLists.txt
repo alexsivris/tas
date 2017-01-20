@@ -79,7 +79,7 @@ find_package(Eigen REQUIRED)
 # generate_messages(
 #   DEPENDENCIES
 #   std_msgs
-# )
+# )oint_setter
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -154,6 +154,9 @@ add_executable(map_goals map_goals/src/main.cpp
  map_goals/src/send_nav_goals.cpp 
  map_goals/src/XMLPoses.cpp)
 
+add_executable(waypoint_setter waypoint_setter/main.cpp
+waypoint_setter/src/waypointsetter.cpp
+waypoint_setter/src/waypointsetter.h)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -167,6 +170,9 @@ add_executable(map_goals map_goals/src/main.cpp
    ${Eigen_LIBRARIES}
  )
  target_link_libraries(map_goals
+   ${catkin_LIBRARIES}
+ )
+ target_link_libraries(waypoint_setter
    ${catkin_LIBRARIES}
  )
 
