@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(object_detection)
 
+add_definitions(-std=c++11)
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -187,12 +189,15 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-#include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS})
 
-#add_executable(landmark_detector src/landmark_detector.cpp)
-#target_link_libraries(landmark_detector ${catkin_LIBRARIES})
-#add_dependencies(landmark_detector object_detection_generate_messages_cpp)
+add_executable(landmarkdetector src/landmarkdetector.cpp src/landmarkdetector.h main.cpp)
 
-#find_package(OpenCV)
-#include_directories(${OpenCV_INCLUDE_DIRS})
-#target_link_libraries(landmark_detector ${OpenCV_LIBRARIES})
+
+#add_executable(landmarkdetector src/landmarkdetector.cpp)
+target_link_libraries(landmarkdetector ${catkin_LIBRARIES})
+add_dependencies(landmarkdetector object_detection_generate_messages_cpp)
+
+find_package(OpenCV)
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_link_libraries(landmarkdetector ${OpenCV_LIBRARIES})
