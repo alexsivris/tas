@@ -70,6 +70,8 @@ void LandmarkDetector::detectLandmarks() {
                 }
             }
 
+            if(good_matches.size() == 0) continue;
+
             // get the keypoints of the good matches
             std::vector<Point2f> good_pnts_template;
             std::vector<Point2f> good_pnts_cam;
@@ -80,6 +82,9 @@ void LandmarkDetector::detectLandmarks() {
 
             Mat maskInH;
             Mat H = findHomography(good_pnts_template, good_pnts_cam, CV_RANSAC, 3, maskInH);
+
+            if(H.rows != 3 || H.cols != 3) continue;
+
             const double det = H.at<double>(0,0) * H.at<double>(1,1) - H.at<double>(1,0) * H.at<double>(0,1);
 
             // get inliers of homography and calculate first moment of the inlier keypoints
