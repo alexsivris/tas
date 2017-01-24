@@ -15,6 +15,8 @@
 
 #include <iterator>
 
+#include "object_detection/landmark.h"
+
 
 using namespace cv;
 using namespace std;
@@ -24,7 +26,7 @@ class LandmarkDetector
 public:
     LandmarkDetector();
     void computeTemplates(vector<String> files);
-    void detectLandmarks();
+    void detectLandmarks(vector<String> files);
 private:
     vector<vector<KeyPoint> > keypoints;
     vector<Mat> descriptors_vec;
