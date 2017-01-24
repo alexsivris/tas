@@ -1,12 +1,11 @@
 #include "slalom.h"
 
 
-SlalomGoals::SlalomGoals(MoveBaseClient &_ac, ros::NodeHandle &_nh)
+SlalomGoals::SlalomGoals(MoveBaseClient &_ac, ros::NodeHandle &_nh) : ac(_ac), m_nh(_nh)
 {
 	//constructor
-	ac = _ac;
-	nh = _nh;
 }
+
 void SlalomGoals::startSlalom()
 {
     ros::Rate loop_rate(5);
@@ -158,7 +157,7 @@ int SlalomGoals::setGoal(double x, double y, double w, double z)
     
     
     ROS_INFO("Sending goal");
-    ac.sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
+    ac.sendGoal(goal);
     
     ac.waitForResult();
     

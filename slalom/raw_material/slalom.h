@@ -10,6 +10,8 @@ typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseCl
 using namespace std;
 class SlalomGoals
 {
+	MoveBaseClient ac;
+	ros::NodeHandle nh;
 public:
     SlalomGoals(MoveBaseClient &_ac,ros::NodeHandle &_nh);
     
