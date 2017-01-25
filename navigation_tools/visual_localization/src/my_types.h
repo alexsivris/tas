@@ -8,6 +8,7 @@ using namespace std;
 struct LandmarkData {
     Mat src;
     Point center;
+    Point2f map_coordinates;
 };
 
 struct TemplateData {

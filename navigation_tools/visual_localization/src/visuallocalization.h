@@ -5,6 +5,7 @@
 #include <cmath>
 #include <string>
 #include <Eigen/Dense>
+#include <unsupported/Eigen/NonLinearOptimization>
 #include <opencv2/opencv.hpp>
 
 #include <tf/transform_listener.h>
@@ -22,8 +23,9 @@ using namespace std;
 using namespace cv;
 
 namespace visionSettings {
-const double cam_fov = 50; // TO MEASURE
-const double laser_range = 240;
+const double cam_fov = 64; // TO MEASURE
+const double laser_range = 180; /// -1.57 to 1.57 rad => pi or 180 deg.
+const double laser_resolution = 720; ///< elements of range vector
 const double image_width = 640;
 const double image_height = 480;
 const double pixelToCamResolution = cam_fov/image_width; /// pxl->deg in cam fov
@@ -34,18 +36,19 @@ const double camToLaserResolution = laser_range/cam_fov; /// deg in cam fov -> d
 class VisualLocalization
 {
 public:
-    static constexpr double min_scan_angle = -0.57 + M_PI; ///< remove M_PI for gazebo
-    static constexpr double max_scan_angle = 0.57 + M_PI;
+    static constexpr double min_scan_angle = -1.57; ///< from scan message
+    static constexpr double max_scan_angle = 1.57;
     static constexpr double world_distance_btwn_tpl = 2.0; // HAVE TO MEASURE !!
     VisualLocalization(ros::NodeHandle _nh, vector<string> &_lm_names);
 
 private:
+    unsigned int getRangeFromAngle(double &_angle);
     double convertPointToAngle(TemplateData& _pt);
     void projectPixelToCamera(Vector3f _pxlHom);
     void projectCameraToOrigin();
     void transformQuaternionToR();
     void broadcastCameraFrame();
-    void localizeCar();
+    Point2f estimatePosition(vector<LandmarkData> &_lm, float da, float db, float dc);
     void locateLandmarksInMap();
     void cbTplDetect(const geometry_msgs::PoseArray::ConstPtr &msg);
     void cbMap(const sensor_msgs::ImageConstPtr& msg);
@@ -58,7 +61,6 @@ private:
     Vector3f m_T;
 
     CarPosition m_carPosition;
-    vector<TemplateData> m_detectedTpl;
     Vector3f m_pixelHom;
     VectorXf m_worldHom;
     // tf stuff
@@ -73,7 +75,10 @@ private:
     bool m_gotMap;
 
     vector<LandmarkData> m_landmarks;
+    vector<TemplateData> m_detectedTpl;
     LandmarkMatcher * m_pLandmarkMatcher;
+
+    bool m_bLocalizationMode;
 
 };
 
