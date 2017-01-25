@@ -25,7 +25,7 @@ typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseCl
 
 
 int main(int argc, char** argv){
-  ros::init(argc, argv, "simple_navigation_goals");
+  ros::init(argc, argv, "slalom");
 
   //tell the action client that we want to spin a thread by default
 
@@ -92,7 +92,7 @@ void startSlalom(){
 
 int setGoal(double x, double y, double yaw)
 {
-		MoveBaseClient ac("move_base", true);
+	MoveBaseClient ac("move_base", true);
 	while (!ac.waitForServer(ros::Duration(5.0))) {
         ROS_INFO("Waiting for the move_base action server to come up");
     }
@@ -104,11 +104,10 @@ int setGoal(double x, double y, double yaw)
     goal.target_pose.pose.position.x = x;
     goal.target_pose.pose.position.y = y;
     goal.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
-  
     
-    ROS_INFO("Sending goal");
     ac.sendGoal(goal);
-    
+    ROS_INFO("Sending goal");    
+
     ac.waitForResult();
     
     if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
@@ -124,7 +123,7 @@ void start()
 {
     goal_x = 1.25; // in m 
     goal_y = 0.55;
-		goal_yaw = -0.785; // -45 deg. 
+    goal_yaw = -0.785; // -45 deg. 
     
     //TODO: Calculate!
     ROS_INFO("Start() function launched");
@@ -145,7 +144,7 @@ void first_pole()
 {
     goal_x = 1.5; // in m 
     goal_y = -1.1;
-		goal_yaw = 0.785; // -45 deg. 
+	goal_yaw = +0.785; // -45 deg. 
     
     //TODO: Calculate!
     
@@ -187,7 +186,7 @@ void third_pole()
 {
     goal_x = 1.5; // in m 
     goal_y = -1.1;
-		goal_yaw = 0.785; // -45 deg. 
+		goal_yaw = +0.785; // -45 deg. 
     
     //TODO: Calculate!
     
