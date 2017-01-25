@@ -104,7 +104,7 @@ int setGoal(double x, double y, double yaw)
     goal.target_pose.pose.position.x = x;
     goal.target_pose.pose.position.y = y;
     goal.target_pose.pose.orientation = tf::createQuaternionMsgFromYaw(yaw);
-  
+
     
     ROS_INFO("Sending goal");
     ac.sendGoal(goal);
