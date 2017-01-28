@@ -2,7 +2,7 @@
 #include <ros/ros.h>
 #include "send_nav_goals.h"
 int main(int argc, char** argv){
-    ros::init(argc, argv, "simple_navigation_goals"); // init and set name
+    ros::init(argc, argv, "map_goals"); // init and set name
     ros::NodeHandle nh;
 
     // Parse params

@@ -7,6 +7,7 @@ add_definitions(-std=c++11)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 
+find_package(OpenCV 3 REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   tf
   cmake_modules
@@ -18,8 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib
   move_base_msgs
 )
-find_package(OpenCV 3 REQUIRED)
-find_package(Eigen REQUIRED)
+#find_package(Eigen REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -115,7 +115,7 @@ catkin_package(
 #  LIBRARIES visual_localization
 #  CATKIN_DEPENDS cv_bridge image_transport roscpp rospy std_msgs
 #  DEPENDS system_lib
-	DEPENDS Eigen
+#	DEPENDS Eigen
 )
 
 ###########
@@ -128,7 +128,7 @@ catkin_package(
 include_directories(
 	map_goals/include
   ${catkin_INCLUDE_DIRS}
-  ${Eigen_INCLUDE_DIRS}
+  #${Eigen_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -148,7 +148,10 @@ add_executable(visual_localization visual_localization/src/visuallocalization.cp
 visual_localization/src/landmarkmatcher.cpp
 visual_localization/src/landmarkmatcher.h
 visual_localization/src/my_types.h
- visual_localization/main.cpp)
+ visual_localization/main.cpp
+visual_localization/src/landmarkdetector.cpp
+visual_localization/src/landmarkdetector.h
+)
  
 add_executable(map_goals map_goals/src/main.cpp
  map_goals/src/send_nav_goals.cpp 
@@ -164,10 +167,14 @@ waypoint_setter/src/waypointsetter.h)
 # add_dependencies(visual_localization_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
  add_dependencies(map_goals ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+ add_dependencies(visual_localization ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+ add_dependencies(waypoint_setter ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 ## Specify libraries to link a library or executable target against
  target_link_libraries(visual_localization
    ${catkin_LIBRARIES}
-   ${Eigen_LIBRARIES}
+  # ${Eigen_LIBRARIES}
  )
  target_link_libraries(map_goals
    ${catkin_LIBRARIES}

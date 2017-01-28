@@ -4,23 +4,27 @@
 #include <iostream>
 #include <cmath>
 #include <string>
-#include <Eigen/Dense>
-#include <unsupported/Eigen/NonLinearOptimization>
+#include <algorithm>
 #include <opencv2/opencv.hpp>
+#include <cv_bridge/cv_bridge.h>
 
 #include <tf/transform_listener.h>
 #include <tf/transform_broadcaster.h>
 #include <geometry_msgs/PoseArray.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <sensor_msgs/LaserScan.h>
-#include <cv_bridge/cv_bridge.h>
+#include <geometry_msgs/PoseArray.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <sensor_msgs/Image.h>
+
 
 #include "my_types.h"
 #include "landmarkmatcher.h"
+#include "landmarkdetector.h"
 
-using namespace Eigen;
 using namespace std;
 using namespace cv;
+
 
 namespace visionSettings {
 const double cam_fov = 64; // TO MEASURE
@@ -39,46 +43,48 @@ public:
     static constexpr double min_scan_angle = -1.57; ///< from scan message
     static constexpr double max_scan_angle = 1.57;
     static constexpr double world_distance_btwn_tpl = 2.0; // HAVE TO MEASURE !!
-    VisualLocalization(ros::NodeHandle _nh, vector<string> &_lm_names);
+    VisualLocalization(ros::NodeHandle _nh, vector<string> &_lm_names, vector<LoadedTemplateData> &_loaded_tpls);
+    void localize();
 
 private:
+    bool anyOfType(vector<TemplateImgData>& _tpl_vec,StarType &_star_type);
     unsigned int getRangeFromAngle(double &_angle);
-    double convertPointToAngle(TemplateData& _pt);
-    void projectPixelToCamera(Vector3f _pxlHom);
-    void projectCameraToOrigin();
-    void transformQuaternionToR();
+    double convertPointToAngle(TemplateImgData& _pt);
     void broadcastCameraFrame();
     Point2f estimatePosition(vector<LandmarkData> &_lm, float da, float db, float dc);
     void locateLandmarksInMap();
+    void cbCamImg(const sensor_msgs::Image::ConstPtr &_img);
     void cbTplDetect(const geometry_msgs::PoseArray::ConstPtr &msg);
     void cbMap(const sensor_msgs::ImageConstPtr& msg);
     void cbLaserScan(const sensor_msgs::LaserScan::ConstPtr &scan);
+    void cbParticles(const geometry_msgs::PoseArray::ConstPtr &_particles);
 
-    // intrinsics
-    Matrix3f m_K;
-    // extrinsics
-    Matrix3f m_R;
-    Vector3f m_T;
+    geometry_msgs::PoseArray m_particleCloud;
 
     CarPosition m_carPosition;
-    Vector3f m_pixelHom;
-    VectorXf m_worldHom;
+
     // tf stuff
-    tf::Vector3 m_camPositionInBaseLink;
-    tf::TransformListener m_tfListener;
+    tf::Vector3 m_camPositionInBaseLink; ///< camera frame location relative to base link frame
+    tf::TransformListener m_tfListener; ///< tf listener
     // ros
-    ros::NodeHandle &m_nh;
-    ros::Subscriber m_subTplDetection;
-    ros::Subscriber m_subMap;
+    ros::NodeHandle &m_nh; ///< node handle
+    ros::Subscriber m_subCamImg; ///< subscribe to /usb_cam/image_raw
+    ros::Subscriber m_subTplDetection; ///< subscriber to /tpl_detect
+    ros::Subscriber m_subMap; ///< subscriber to /map_image/full
+    ros::Subscriber m_subParticles; ///< subscriber to /particlecloud
+    ros::Publisher m_pubPosition; ///< publisher of pose estimate from localization results
 
-    cv::Mat m_mapImg;
-    bool m_gotMap;
+    Mat m_camImg;
+    Mat m_mapImg; ///< map in mat format for further processing
+    bool m_gotMap; ///< a flag is set when the map image is received
 
-    vector<LandmarkData> m_landmarks;
-    vector<TemplateData> m_detectedTpl;
-    LandmarkMatcher * m_pLandmarkMatcher;
-
+    vector<LoadedTemplateData> &m_loadedTemplates;
+    vector<LandmarkData> m_landmarks; ///< contains position of landmarks in the map (world coordinates)
+    vector<TemplateImgData> m_detectedTpl; ///< contains position of templates in pixel and world coordinates,as well as the distance from the car
+    LandmarkMatcher * m_pLandmarkMatcher; ///< used to find landmarks in map (not in camera image)
     bool m_bLocalizationMode;
+
+    LandmarkDetector * m_pLandmarkDetector; /// detect landmarks in camera image
 
 };
 
