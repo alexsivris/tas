@@ -47,12 +47,15 @@ public:
     void localize();
 
 private:
-    bool anyOfType(vector<TemplateImgData>& _tpl_vec,StarType &_star_type);
+    void publishPose(Point2f &_pose);
+    Point2f simpleLocalization(TemplateImgData &_tpl);
+    bool anyOfType(vector<TemplateImgData>& _tpl_vec,unsigned int &_id);
     unsigned int getRangeFromAngle(double &_angle);
     double convertPointToAngle(TemplateImgData& _pt);
     void broadcastCameraFrame();
     Point2f estimatePosition(vector<LandmarkData> &_lm, float da, float db, float dc);
     void locateLandmarksInMap();
+    void cbAmclPose(const geometry_msgs::PoseWithCovariance::ConstPtr &msg);
     void cbCamImg(const sensor_msgs::Image::ConstPtr &_img);
     void cbTplDetect(const geometry_msgs::PoseArray::ConstPtr &msg);
     void cbMap(const sensor_msgs::ImageConstPtr& msg);
@@ -68,21 +71,23 @@ private:
     tf::TransformListener m_tfListener; ///< tf listener
     // ros
     ros::NodeHandle &m_nh; ///< node handle
+    ros::Subscriber m_subAmclPose; ///< subscribe to pose estimation by amcl
     ros::Subscriber m_subCamImg; ///< subscribe to /usb_cam/image_raw
     ros::Subscriber m_subTplDetection; ///< subscriber to /tpl_detect
     ros::Subscriber m_subMap; ///< subscriber to /map_image/full
     ros::Subscriber m_subParticles; ///< subscriber to /particlecloud
     ros::Publisher m_pubPosition; ///< publisher of pose estimate from localization results
 
+    geometry_msgs::PoseWithCovariance m_amclPose;
     Mat m_camImg;
     Mat m_mapImg; ///< map in mat format for further processing
     bool m_gotMap; ///< a flag is set when the map image is received
-
+    bool m_gotPoseArray; ///< set true when amcl particle cloud is received
     vector<LoadedTemplateData> &m_loadedTemplates;
     vector<LandmarkData> m_landmarks; ///< contains position of landmarks in the map (world coordinates)
     vector<TemplateImgData> m_detectedTpl; ///< contains position of templates in pixel and world coordinates,as well as the distance from the car
     LandmarkMatcher * m_pLandmarkMatcher; ///< used to find landmarks in map (not in camera image)
-    bool m_bLocalizationMode;
+    bool m_bInitLocalization;
 
     LandmarkDetector * m_pLandmarkDetector; /// detect landmarks in camera image
 
