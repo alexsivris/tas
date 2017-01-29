@@ -10,7 +10,7 @@ public:
     LandmarkDetector(); // 3 star tpls
     TemplateImgData locate();
     bool foundTemplate(Mat &_img, LoadedTemplateData &_tpl);
-    StarType getStarType();
+    unsigned int getStarId();
 private:
     int findBestMatch(vector< vector< Point> > &_img_cnt, vector< Point> &_tpl_strong_cnt, Mat &_tpl_hist);
     vector<vector<cv::Point>> m_tplContours;

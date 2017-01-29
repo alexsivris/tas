@@ -1,7 +1,7 @@
 #include "visuallocalization.h"
 
 VisualLocalization::VisualLocalization(ros::NodeHandle _nh, vector<string> &_lm_names, vector<LoadedTemplateData> &_loaded_tpls) :
-    m_nh(_nh), m_gotMap(false), m_bLocalizationMode(false),m_loadedTemplates(_loaded_tpls)
+    m_nh(_nh), m_gotMap(false), m_bInitLocalization(true),m_loadedTemplates(_loaded_tpls), m_gotPoseArray (false)
 {
     cout << "Constructor VL: 1" << endl;
 
@@ -12,25 +12,35 @@ VisualLocalization::VisualLocalization(ros::NodeHandle _nh, vector<string> &_lm_
     for (int i=0; i<_lm_names.size();i++)
     {
         m_landmarks.at(i).src = imread(_lm_names.at(0),1);
+        m_landmarks.at(i).id = i;
+        m_loadedTemplates.at(i).id = i;
     }
+
 
     m_subCamImg = m_nh.subscribe("/usb_cam/image_raw",1,&VisualLocalization::cbCamImg,this);
     m_subTplDetection = m_nh.subscribe("/tpl_detect", 1, &VisualLocalization::cbTplDetect, this); // FROM BENNI
     m_subMap = m_nh.subscribe("/map_image/full",1,&VisualLocalization::cbMap, this);
     m_subParticles = m_nh.subscribe("/particlecloud",1,&VisualLocalization::cbParticles, this);
+    m_subAmclPose = m_nh.subscribe("/amcl_pose",1,&VisualLocalization::cbAmclPose,this);
     m_pubPosition = m_nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("/initialpose",1);
 }
 
 void VisualLocalization::localize()
 {
     //loop
-    ros::Rate rt(100);
+    ros::Rate rt(10);
     while (ros::ok())
     {
         //do localization
         ros::spinOnce();
         rt.sleep();
     }
+}
+
+
+void VisualLocalization::cbAmclPose(const geometry_msgs::PoseWithCovariance::ConstPtr &msg)
+{
+    m_amclPose.pose = msg->pose;
 }
 
 void VisualLocalization::cbCamImg(const sensor_msgs::Image::ConstPtr &_img)
@@ -53,33 +63,72 @@ void VisualLocalization::cbCamImg(const sensor_msgs::Image::ConstPtr &_img)
     {
         if (m_pLandmarkDetector->foundTemplate(m_camImg,m_loadedTemplates.at(i)))
         {
-            StarType st = m_pLandmarkDetector->getStarType();
-            if (!anyOfType(m_detectedTpl,st))
+            unsigned int id = m_pLandmarkDetector->getStarId();
+            id = m_loadedTemplates.at(i).id;
+            if (!anyOfType(m_detectedTpl,id))
+            {
                 m_detectedTpl.push_back(m_pLandmarkDetector->locate());
+                m_detectedTpl.back().id = id;
+            }
         }
     }
-    cout << "Found " << m_detectedTpl.size() << " templates." << endl;
-    for (auto i=0;i<m_detectedTpl.size(); i++)
+    if (m_detectedTpl.size())
     {
-        cout << "Coordinates: " << m_detectedTpl.at(i).u <<
-                ", " << m_detectedTpl.at(i).v << endl <<
-                "Distance from car: " << m_detectedTpl.at(i).distance << endl;
-    }
-    if (m_detectedTpl.size() == 3)
-    {
-        // Set initial pose
-        Point2f pose = estimatePosition(m_landmarks,
-                                        m_detectedTpl.at(0).distance,
-                                        m_detectedTpl.at(1).distance,
-                                        m_detectedTpl.at(2).distance
-                                        );
-        m_carPosition.x = pose.x;
-        m_carPosition.y = pose.y;
+        cout << "Found: " << m_detectedTpl.size() << " templates." << endl;
+        Point2f pose;
+        for (auto i=0;i<m_detectedTpl.size(); i++)
+        {
+            m_detectedTpl.at(i).theta = convertPointToAngle(m_detectedTpl.at(i));
+#ifdef DBG
+            cout << "Template " << i << endl <<
+                    "----------------------------------------------------" << endl;
+            cout << "Coordinates: " << m_detectedTpl.at(i).u <<
+                    ", " << m_detectedTpl.at(i).v << endl <<
+                    "Distance from car: " << m_detectedTpl.at(i).distance << endl <<
+                    "ID: "<< m_detectedTpl.at(i).id << endl <<
+                    "Theta: " << m_detectedTpl.at(i).theta  << endl <<
+                    "----------------------------------------------------" << endl;
+#endif
+        }
+        if (m_detectedTpl.size() == 3)
+        {
+            // Set initial pose
+            pose = estimatePosition(m_landmarks,
+                                            m_detectedTpl.at(0).distance,
+                                            m_detectedTpl.at(1).distance,
+                                            m_detectedTpl.at(2).distance
+                                            );
+            m_carPosition.x = pose.x;
+            m_carPosition.y = pose.y;
+            m_bInitLocalization = false;
+        }
+        if (m_detectedTpl.size() == 1 && !m_bInitLocalization)
+        {
+            // simple localization
+            pose = simpleLocalization(m_detectedTpl.at(0));
+
+        }
+        publishPose(pose);
     }
     m_detectedTpl.clear();
     imshow("Camera img",m_camImg);
     waitKey(3);
 
+}
+inline void VisualLocalization::publishPose(Point2f &_pose)
+{
+    geometry_msgs::PoseWithCovarianceStamped msg;
+    msg.header.frame_id = "/map";
+    msg.header.stamp = ros::Time::now();
+    msg.pose.pose.position.x = _pose.x;
+    msg.pose.pose.position.y = _pose.y;
+    msg.pose.pose.position.z = 0.0;
+    msg.pose.pose.orientation = m_amclPose.pose.orientation;
+    msg.pose.covariance[6*0+0] = 0.5 * 0.5;
+    msg.pose.covariance[6*1+1] = 0.5 * 0.5;
+    msg.pose.covariance[6*3+3] = M_PI/12.0 * M_PI/12.0;
+
+    m_pubPosition.publish(msg);
 }
 
 /**
@@ -89,6 +138,7 @@ void VisualLocalization::cbCamImg(const sensor_msgs::Image::ConstPtr &_img)
 void VisualLocalization::cbParticles(const geometry_msgs::PoseArray::ConstPtr &_particles)
 {
     m_particleCloud.poses = _particles->poses;
+    m_gotPoseArray = true;
 }
 
 /**
@@ -99,18 +149,17 @@ void VisualLocalization::cbLaserScan(const sensor_msgs::LaserScan::ConstPtr &sca
 {
     int minIndex = 0;//ceil((min_scan_angle - scan->angle_min) / scan->angle_increment);
     int maxIndex = 719;//floor((max_scan_angle - scan->angle_min) / scan->angle_increment);
-    if (m_bLocalizationMode)
+
+    for (int i=0;i<m_detectedTpl.size();i++)
     {
-        for (int i=0;i<m_detectedTpl.size();i++)
-        {
-            unsigned int rangeIndex = getRangeFromAngle(m_detectedTpl.at(i).theta);
-            if(scan->ranges[rangeIndex]!=INFINITY &&
-                    rangeIndex <= maxIndex &&
-                    rangeIndex >= minIndex){
-                m_detectedTpl.at(i).distance = scan->ranges[rangeIndex];
-            }
+        unsigned int rangeIndex = getRangeFromAngle(m_detectedTpl.at(i).theta);
+        if(scan->ranges[rangeIndex]!=INFINITY &&
+                rangeIndex <= maxIndex &&
+                rangeIndex >= minIndex){
+            m_detectedTpl.at(i).distance = scan->ranges[rangeIndex];
         }
     }
+
     ros::spinOnce();
 }
 
@@ -123,6 +172,8 @@ void VisualLocalization::cbMap(const sensor_msgs::ImageConstPtr& msg) // hector_
             ROS_WARN("Received NULL image.");
         }
         m_mapImg = imgPtr->image;
+
+        // for (auto i; i<m_detectedTpl.size(); i++)
         locateLandmarksInMap();
     }
     catch (cv_bridge::Exception &ex)
@@ -156,7 +207,7 @@ void VisualLocalization::cbTplDetect(const geometry_msgs::PoseArray::ConstPtr &m
                                            m_detectedTpl.at(2).distance);
 
     // if (...)
-    m_bLocalizationMode = true; // ERST TRUE SETZEN WENN 3 TEMPLATES ERKANNT WURDEN, ANSONSTEN FALSE
+    // m_bLocalizationMode = true; // ERST TRUE SETZEN WENN 3 TEMPLATES ERKANNT WURDEN, ANSONSTEN FALSE
     // else
 
     ros::spinOnce();
@@ -169,10 +220,8 @@ inline void VisualLocalization::locateLandmarksInMap()
     {
         m_gotMap = true;
         m_pLandmarkMatcher = new LandmarkMatcher(m_mapImg,m_landmarks, m_nh);
-        cout << "center of tpl1 " << m_landmarks.at(0).map_coordinates <<endl;
-        cout << "center of tpl2 " << m_landmarks.at(1).map_coordinates <<endl;
-        cout << "center of tpl3 " << m_landmarks.at(2).map_coordinates <<endl;
-
+        for (auto i=0;i<m_landmarks.size();i++)
+            cout << "center of tpl"<< i << " " << m_landmarks.at(i).map_coordinates <<endl;
     }
 }
 
@@ -245,11 +294,79 @@ inline unsigned int VisualLocalization::getRangeFromAngle(double &_angle)
     return range;
 }
 
-bool VisualLocalization::anyOfType(vector<TemplateImgData>& _tpl_vec,StarType &_star_type)
+bool VisualLocalization::anyOfType(vector<TemplateImgData>& _tpl_vec,unsigned int &_id)
 {
     for (auto it: _tpl_vec)
     {
-        if (it.startype == _star_type)
+        if (it.id == _id)
             return true;
     }
+}
+
+Point2f VisualLocalization::simpleLocalization(TemplateImgData &_tpl)
+{
+    double res=0;
+    int t1=0,t2=0;
+    int bestId=NO_GOOD_MATCH;
+    int lmDist = 9999;
+    int closestId=NO_GOOD_MATCH;
+    Point2f pose;
+    pose.x=0;
+    pose.y=0;
+
+    if (m_gotPoseArray)
+    {
+        pose.x = m_particleCloud.poses.at(0).position.x;
+        pose.y = m_particleCloud.poses.at(0).position.y;
+
+        for (auto i=0; i< m_particleCloud.poses.size(); i++)
+        {
+            //do any of the points lie on the circle
+            t1 = m_particleCloud.poses.at(i).position.x - _tpl.x;
+            t2 = m_particleCloud.poses.at(i).position.y - _tpl.y;
+            res = pow(t1,2) + pow(t2,2) - _tpl.distance;
+            if (res < lmDist)
+            {
+                lmDist = res;
+                closestId = i;
+            }
+
+            if (res < 0.2) // allow 20cm uncertainty
+                bestId = i;
+        }
+        if (bestId == NO_GOOD_MATCH)
+        {
+            // take point on circle that is closest to pose array
+            double deg = 360;
+            double x,y;
+            double dist = 99;
+            for (auto theta=-deg/2;theta<deg/2;theta++)
+            {
+                x = _tpl.x + cos(theta)*_tpl.distance;
+                y = _tpl.y + sin(theta)*_tpl.distance;
+                //distance to BEST pose array estimate
+                double d1 = x - m_particleCloud.poses.at(closestId).position.x;
+                d1 = pow(d1,2);
+                double d2 = y - m_particleCloud.poses.at(closestId).position.y;
+                d2 = pow(d2,2);
+
+                double tmp_dist = d1 + d2;
+                tmp_dist = sqrt(tmp_dist);
+                if (tmp_dist < dist)
+                {
+                    //dist = tmp_dist;
+                    pose.x = x;
+                    pose.y = y;
+                }
+            }
+
+        }
+        else
+        {
+            pose.x = m_particleCloud.poses.at(bestId).position.x;
+            pose.y = m_particleCloud.poses.at(bestId).position.y;
+        }
+    }
+    return pose;
+
 }

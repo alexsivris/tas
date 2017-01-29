@@ -5,9 +5,9 @@ LandmarkDetector::LandmarkDetector() :
 {
 
 }
-StarType LandmarkDetector::getStarType()
+unsigned int LandmarkDetector::getStarId()
 {
-    return m_result.startype;
+    return m_result.id;
 }
 
 bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
@@ -26,21 +26,31 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
     const float * histRange = { range };
     // get contours in tpl
     cv::threshold(_tpl.src, tpl_binary,m_threshold, 255, cv::THRESH_BINARY);
-    int strongContour = _tpl.startype; // mario 31 red_star 2
-    m_result.startype = _tpl.startype;
 
+    // coud be done with switch case..
+    int strongContour = 2; // mario 31 red_star 2
+
+
+
+    m_result.startype = _tpl.startype;
     cv::findContours(tpl_binary,m_tplContours,cv::noArray(),cv::RETR_LIST,cv::CHAIN_APPROX_SIMPLE);
     tpl_binary = cv::Scalar::all(0);
     drawContours(tpl_binary,m_tplContours,strongContour,cv::Scalar::all(255)); //
+
 #ifdef SHOW_IMG
     imshow("Template", tpl_binary);
+    waitkey(0);
 #endif
     calcHist(&_tpl.src,1,0,Mat(),tpl_hist,1,&histSize,&histRange,true,false);
 
 
     // search in img
     cvtColor(m_camImg,hsv_frame,COLOR_BGR2HSV);
+
+    // Blue: 230 Hue, Green: 110 Hue
     inRange(hsv_frame, Scalar(150,50, 50), Scalar(179, 255, 255), red_frame);
+
+
     Mat er_kernel = Mat::ones(Size(10,10),CV_8UC1);
     // filter noise
     erode(red_frame,red_frame,er_kernel);
@@ -54,22 +64,25 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
     // use red mask
     red_frame.copyTo(m_binary);
     cv::findContours(m_binary,contours,cv::noArray(),cv::RETR_LIST,cv::CHAIN_APPROX_SIMPLE);
+
+
     int idxBest = findBestMatch(contours, m_tplContours.at(strongContour),tpl_hist);
+
     m_binary = cv::Scalar::all(0);
     resize(m_binary,m_binary,Size(m_camImg.cols,m_camImg.rows));
+
     if (idxBest != NO_GOOD_MATCH)
     {
         cv::drawContours(m_binary,contours,idxBest, cv::Scalar::all(255));
         circle(m_binary,m_center,m_radius,Scalar::all(255),3);
         rectangle(m_binary,m_boundRect,Scalar::all(255),3);
         rectangle(m_camImg,m_center,m_center,Scalar(0,255,0),50);
-#ifdef DBG
+#ifdef DBG_2
         cout << "Best contour size: " << contours.at(idxBest).size()
              << " Center: " << center << " Area: " << contourArea(contours.at(idxBest)) << endl;
         imshow(g_output_win, g_binary);
         imshow("BGR", m_camImg);
         waitKey(33);
-
         destroyAllWindows();
 #endif
         return true;
@@ -77,7 +90,8 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
     }
     else
     {
-#ifdef DBG
+
+#ifdef DBG_2
         imshow("BGR", m_camImg);
         waitKey(33);
         destroyAllWindows();
