@@ -11,7 +11,9 @@
 using namespace cv;
 using namespace std;
 
-
+/**
+ * @brief The LandmarkMatcher class
+ */
 class LandmarkMatcher
 {
 public:

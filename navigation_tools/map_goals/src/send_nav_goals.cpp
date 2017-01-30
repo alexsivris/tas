@@ -19,7 +19,7 @@ void NavGoals::startGoalsProcess()
         // SEND GOALS HERE
         prepareMarkers();
         publishWaypoints();
-        sendGoals();
+        //sendGoals();
         ros::spinOnce();
         loop_rate.sleep();
     }

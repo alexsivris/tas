@@ -8,7 +8,7 @@ typedef enum opMode { NO_INIT, INIT } opMode;
 enum StarType {
     RED=2,
     BLUE=3,
-    GREEN=2
+    GREEN=4
 }; //g,b muessen noch bestimmt werden
 
 using namespace cv;

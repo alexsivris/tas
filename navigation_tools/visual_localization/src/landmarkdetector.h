@@ -3,7 +3,9 @@
 #include <iostream>
 #include "my_types.h"
 #include <opencv2/opencv.hpp>
-
+/**
+ * @brief The LandmarkDetector class
+ */
 class LandmarkDetector
 {
 public:
