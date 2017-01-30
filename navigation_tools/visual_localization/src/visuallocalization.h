@@ -82,6 +82,7 @@ private:
     ros::Subscriber m_subMap; ///< subscriber to /map_image/full
     ros::Subscriber m_subParticles; ///< subscriber to /particlecloud
     ros::Publisher m_pubPosition; ///< publisher of pose estimate from localization results
+    ros::Publisher m_pubLandmarks;
 
     geometry_msgs::PoseWithCovariance m_amclPose;
     Mat m_camImg;

@@ -17,15 +17,14 @@ using namespace std;
 class LandmarkMatcher
 {
 public:
-    LandmarkMatcher(Mat &_src, vector<LandmarkData> &_tpl, ros::NodeHandle &_nh);
+    LandmarkMatcher(Mat &_src, vector<LandmarkData> &_tpl, ros::Publisher &_pub);
 private:
     void publishCoordinates(vector<LandmarkData> &_tvec);
     void findLandmarks();
 
     Mat & m_src;
     vector<LandmarkData> &m_tpl;
-    ros::NodeHandle &m_nh;
-    ros::Publisher m_lmPub;
+    ros::Publisher &m_lmPub;
 };
 
 #endif // LANDMARKMATCHER_H
