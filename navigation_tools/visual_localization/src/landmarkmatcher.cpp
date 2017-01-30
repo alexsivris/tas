@@ -1,9 +1,9 @@
 #include "landmarkmatcher.h"
 
-LandmarkMatcher::LandmarkMatcher(Mat &_src, vector<LandmarkData> &_tpl, ros::NodeHandle &_nh) :
-    m_src(_src), m_tpl(_tpl), m_nh(_nh)
+LandmarkMatcher::LandmarkMatcher(Mat &_src, vector<LandmarkData> &_tpl, ros::Publisher &_pub) :
+    m_src(_src), m_tpl(_tpl), m_lmPub(_pub)
 {
-    m_lmPub = _nh.advertise<sensor_msgs::PointCloud>("tpl_in_map",1);
+
     findLandmarks();
 }
 
@@ -19,10 +19,7 @@ void LandmarkMatcher::publishCoordinates(vector<LandmarkData> &_tvec)
     pcl.header.frame_id = "/map";
     pcl.header.stamp = ros::Time::now();
     pcl.header.seq = 0;
-#ifdef DBG
-    cout << _tvec.at(0).center << endl;
-    cout << _tvec.at(1).center << endl;
-#endif
+
     for ( int i=0;i<_tvec.size();i++)
     {
         pt32.x = 0.05*(_tvec.at(i).center.x) - 100;
@@ -57,7 +54,7 @@ void LandmarkMatcher::findLandmarks()
     m_src.copyTo(imdraw);
     int match_method = CV_TM_SQDIFF;
 
-    for (int i=0;i<m_tpl.size()-1;i++)
+    for (int i=0;i<m_tpl.size();i++)
     {
         Mat result;
         result.create(m_src.rows - m_tpl.at(i).src.rows + 1, m_src.cols - m_tpl.at(i).src.cols + 1, CV_32F);

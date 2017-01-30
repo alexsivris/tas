@@ -54,16 +54,14 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
         inRange(hsv_frame, Scalar(0,150, 106), Scalar(20, 255, 174), red_frame);
         break;
     case StarType::BLUE:
-        inRange(hsv_frame, Scalar(0,150, 106), Scalar(20, 255, 174), red_frame);
+        inRange(hsv_frame, Scalar(95,141, 0), Scalar(144, 255, 185), red_frame);
         break;
     case StarType::GREEN:
-        inRange(hsv_frame, Scalar(0,150, 106), Scalar(20, 255, 174), red_frame);
+        inRange(hsv_frame, Scalar(37,82, 56), Scalar(76, 207, 255), red_frame);
         break;
     default:
         inRange(hsv_frame, Scalar(0,150, 106), Scalar(20, 255, 174), red_frame);
     }
-
-
 
     Mat er_kernel = Mat::ones(Size(10,10),CV_8UC1);
     // filter noise

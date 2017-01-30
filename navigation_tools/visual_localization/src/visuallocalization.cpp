@@ -11,11 +11,10 @@ VisualLocalization::VisualLocalization(ros::NodeHandle _nh, vector<string> &_lm_
     m_landmarks.resize(_lm_names.size());
     for (int i=0; i<_lm_names.size();i++)
     {
-        m_landmarks.at(i).src = imread(_lm_names.at(0),1);
+        m_landmarks.at(i).src = imread(_lm_names.at(i),1);
         m_landmarks.at(i).id = i;
         m_loadedTemplates.at(i).id = i;
     }
-
 
     m_subCamImg = m_nh.subscribe("/usb_cam/image_raw",1,&VisualLocalization::cbCamImg,this);
     m_subTplDetection = m_nh.subscribe("/tpl_detect", 1, &VisualLocalization::cbTplDetect, this); // FROM BENNI
@@ -24,6 +23,7 @@ VisualLocalization::VisualLocalization(ros::NodeHandle _nh, vector<string> &_lm_
     m_subAmclPose = m_nh.subscribe("/amcl_pose",1,&VisualLocalization::cbAmclPose,this);
     m_subScan = m_nh.subscribe("/scan",1,&VisualLocalization::cbLaserScan,this);
     m_pubPosition = m_nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("/initialpose",1);
+    m_pubLandmarks = _nh.advertise<sensor_msgs::PointCloud>("tpl_in_map",1);
 }
 
 void VisualLocalization::localize()
@@ -226,9 +226,9 @@ inline void VisualLocalization::locateLandmarksInMap()
     if (!m_gotMap)
     {
         m_gotMap = true;
-        m_pLandmarkMatcher = new LandmarkMatcher(m_mapImg,m_landmarks, m_nh);
+        m_pLandmarkMatcher = new LandmarkMatcher(m_mapImg,m_landmarks, m_pubLandmarks);
         for (auto i=0;i<m_landmarks.size();i++)
-            cout << "center of tpl"<< i << " " << m_landmarks.at(i).map_coordinates <<endl;
+            cout << "center of tpl" << i << " " << m_landmarks.at(i).map_coordinates <<endl;
     }
 }
 
