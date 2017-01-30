@@ -22,6 +22,7 @@ VisualLocalization::VisualLocalization(ros::NodeHandle _nh, vector<string> &_lm_
     m_subMap = m_nh.subscribe("/map_image/full",1,&VisualLocalization::cbMap, this);
     m_subParticles = m_nh.subscribe("/particlecloud",1,&VisualLocalization::cbParticles, this);
     m_subAmclPose = m_nh.subscribe("/amcl_pose",1,&VisualLocalization::cbAmclPose,this);
+    m_subScan = m_nh.subscribe("/scan",1,&VisualLocalization::cbLaserScan,this);
     m_pubPosition = m_nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("/initialpose",1);
 }
 
@@ -32,6 +33,10 @@ void VisualLocalization::localize()
     while (ros::ok())
     {
         //do localization
+        if (!m_bInitLocalization)
+        {
+            broadcastOriginFrame();
+        }
         ros::spinOnce();
         rt.sleep();
     }
@@ -72,47 +77,49 @@ void VisualLocalization::cbCamImg(const sensor_msgs::Image::ConstPtr &_img)
             }
         }
     }
-    if (m_detectedTpl.size())
+    // if (m_detectedTpl.size())
+    //{
+    cout << "Found: " << m_detectedTpl.size() << " templates." << endl;
+    Point2f pose;
+    for (auto i=0;i<m_detectedTpl.size(); i++)
     {
-        cout << "Found: " << m_detectedTpl.size() << " templates." << endl;
-        Point2f pose;
-        for (auto i=0;i<m_detectedTpl.size(); i++)
-        {
-            m_detectedTpl.at(i).theta = convertPointToAngle(m_detectedTpl.at(i));
+        m_detectedTpl.at(i).theta = convertPointToAngle(m_detectedTpl.at(i));
 #ifdef DBG
-            cout << "Template " << i << endl <<
-                    "----------------------------------------------------" << endl;
-            cout << "Coordinates: " << m_detectedTpl.at(i).u <<
-                    ", " << m_detectedTpl.at(i).v << endl <<
-                    "Distance from car: " << m_detectedTpl.at(i).distance << endl <<
-                    "ID: "<< m_detectedTpl.at(i).id << endl <<
-                    "Theta: " << m_detectedTpl.at(i).theta  << endl <<
-                    "----------------------------------------------------" << endl;
+        cout << "Template " << i << endl <<
+                "----------------------------------------------------" << endl;
+        cout << "Coordinates: " << m_detectedTpl.at(i).u <<
+                ", " << m_detectedTpl.at(i).v << endl <<
+                "Distance from car: " << m_detectedTpl.at(i).distance << endl <<
+                "ID: "<< m_detectedTpl.at(i).id << endl <<
+                "Theta: " << m_detectedTpl.at(i).theta  << endl <<
+                "----------------------------------------------------" << endl;
 #endif
-        }
-        if (m_detectedTpl.size() == 3)
-        {
-            // Set initial pose
-            pose = estimatePosition(m_landmarks,
-                                            m_detectedTpl.at(0).distance,
-                                            m_detectedTpl.at(1).distance,
-                                            m_detectedTpl.at(2).distance
-                                            );
-            m_carPosition.x = pose.x;
-            m_carPosition.y = pose.y;
-            m_bInitLocalization = false;
-        }
-        if (m_detectedTpl.size() == 1 && !m_bInitLocalization)
-        {
-            // simple localization
-            pose = simpleLocalization(m_detectedTpl.at(0));
-
-        }
-        publishPose(pose);
     }
-    m_detectedTpl.clear();
+    if (m_detectedTpl.size() == 3)
+    {
+        // Set initial pose
+        pose = estimatePosition(m_landmarks,
+                                m_detectedTpl.at(0).distance,
+                                m_detectedTpl.at(1).distance,
+                                m_detectedTpl.at(2).distance
+                                );
+        m_carOrigin.x = pose.x;
+        m_carOrigin.y = pose.y;
+        calculateOriginOrientation();
+        m_bInitLocalization = false;
+    }
+    if (m_detectedTpl.size() == 1 && !m_bInitLocalization) // do this only if origin has been set
+    {
+        // simple localization
+        pose = simpleLocalization(m_detectedTpl.at(0));
+
+    }
+    //publishPose(pose);
+    //}
+    //HAS TO BE DONE!m_detectedTpl.clear();
     imshow("Camera img",m_camImg);
     waitKey(3);
+    ros::spinOnce();
 
 }
 inline void VisualLocalization::publishPose(Point2f &_pose)
@@ -260,16 +267,36 @@ inline Point2f VisualLocalization::estimatePosition(vector<LandmarkData> &_lm, f
     return -estimated_position;
 }
 
-void VisualLocalization::broadcastCameraFrame()
+void VisualLocalization::broadcastOriginFrame()
 {
-    tf::TransformBroadcaster broadcaster;
-    tf::Transform transf;
-    transf.setOrigin(tf::Vector3(m_camPositionInBaseLink));
+    tf::Transform transform;
+    transform.setOrigin(tf::Vector3(m_carOrigin.x,m_carOrigin.y,0.0));
     tf::Quaternion q;
-    q.setRPY(0,0,0); //  MEASUREMENTS
-    transf.setRotation(q);
-    broadcaster.sendTransform(tf::StampedTransform(transf, ros::Time::now(),
-                                                   "/base_link","/camera_frame"));
+    q.setRPY(m_carOrigin.theta,0.0,0.0);
+    transform.setRotation(q);
+    m_originBroadcaster.sendTransform(tf::StampedTransform(transform,
+                                                           ros::Time::now(),
+                                                           "map",
+                                                           "/nav_origin"));
+
+}
+void VisualLocalization::calculateOriginOrientation()
+{
+    Point2f centroid;
+    centroid.x = m_landmarks.at(0).map_coordinates.x +
+            m_landmarks.at(1).map_coordinates.x +
+            m_landmarks.at(2).map_coordinates.x;
+    centroid.x /= 3;
+    centroid.y = m_landmarks.at(0).map_coordinates.y +
+            m_landmarks.at(1).map_coordinates.y +
+            m_landmarks.at(2).map_coordinates.y;
+    centroid.y /= 3;
+
+    double tmp;
+    tmp = m_carOrigin.x - centroid.x;
+    tmp /= (m_carOrigin.y - centroid.y);
+
+    m_carOrigin.theta = atan(tmp);
 
 }
 

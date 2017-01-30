@@ -2,106 +2,106 @@
 <poses>
 	<point name="point_1">
 		<coordinates>
-			<x>-0.0544085502625</x>
-			<y>0.0714597702026</y>
+			<x>-13.1993284225</x>
+			<y>0.226727724075</y>
 			<z>0.0</z>
 		</coordinates>
 		<orientation>
 			<x>0.0</x>
 			<y>0.0</y>
-			<z>-0.737358032273</z>
-			<w>0.675502133411</w>
+			<z>-0.999999970175</z>
+			<w>0.000244233684985</w>
 		</orientation>
 	</point>
 	<point name="point_2">
 		<coordinates>
-			<x>-0.327541828156</x>
-			<y>-7.68667697906</y>
+			<x>-22.9470901489</x>
+			<y>0.535188817978</y>
 			<z>0.0</z>
 		</coordinates>
 		<orientation>
 			<x>0.0</x>
 			<y>0.0</y>
-			<z>-0.717375641687</z>
-			<w>0.696686578537</w>
+			<z>-0.999682890313</z>
+			<w>0.025181715895</w>
+		</orientation>
+	</point>
+	<point name="point_3">
+		<coordinates>
+			<x>-25.0977157593</x>
+			<y>-4.47077274323</y>
+			<z>0.0</z>
+		</coordinates>
+		<orientation>
+			<x>0.0</x>
+			<y>0.0</y>
+			<z>-0.688933957301</z>
+			<w>0.724824118306</w>
 		</orientation>
 	</point>
 	<point name="point_4">
 		<coordinates>
-			<x>4.97519540787</x>
-			<y>-16.8989200592</y>
+			<x>-25.7095737457</x>
+			<y>-9.56436882019</y>
 			<z>0.0</z>
 		</coordinates>
 		<orientation>
 			<x>0.0</x>
 			<y>0.0</y>
-			<z>-0.00959159873829</z>
-			<w>0.999953999559</w>
+			<z>-0.655945896206</z>
+			<w>0.754807910167</w>
 		</orientation>
 	</point>
 	<point name="point_5">
 		<coordinates>
-			<x>11.3337287903</x>
-			<y>-19.5215110779</y>
+			<x>-29.2440185547</x>
+			<y>-10.3299484253</y>
 			<z>0.0</z>
 		</coordinates>
 		<orientation>
 			<x>0.0</x>
 			<y>0.0</y>
-			<z>-0.716951226222</z>
-			<w>0.697123331426</w>
+			<z>0.937460711922</z>
+			<w>0.348091099575</w>
 		</orientation>
 	</point>
 	<point name="point_6">
 		<coordinates>
-			<x>5.44483089447</x>
-			<y>-20.7878742218</y>
+			<x>-29.5028533936</x>
+			<y>-5.31425666809</y>
 			<z>0.0</z>
 		</coordinates>
 		<orientation>
 			<x>0.0</x>
 			<y>0.0</y>
-			<z>0.99410674311</z>
-			<w>0.108405642397</w>
+			<z>0.591176703837</z>
+			<w>0.80654206638</w>
 		</orientation>
 	</point>
 	<point name="point_7">
 		<coordinates>
-			<x>1.98264122009</x>
-			<y>-17.298412323</y>
+			<x>-25.0720508575</x>
+			<y>-4.98624897003</y>
 			<z>0.0</z>
 		</coordinates>
 		<orientation>
 			<x>0.0</x>
 			<y>0.0</y>
-			<z>0.594638059549</z>
-			<w>0.803993518715</w>
+			<z>-0.6759920297885</z>
+			<w>0.736908933087</w>
 		</orientation>
 	</point>
 	<point name="point_8">
 		<coordinates>
-			<x>9.36914539337</x>
-			<y>-17.1694488525</y>
+			<x>-19.8627910614</x>
+			<y>-14.440650177</y>
 			<z>0.0</z>
 		</coordinates>
 		<orientation>
 			<x>0.0</x>
 			<y>0.0</y>
-			<z>-0.0150151446005</z>
-			<w>0.999887266362</w>
-		</orientation>
-	</point>
-	<point name="point_9">
-		<coordinates>
-			<x>14.0952787399</x>
-			<y>-10.8304958344</y>
-			<z>0.0</z>
-		</coordinates>
-		<orientation>
-			<x>0.0</x>
-			<y>0.0</y>
-			<z>0.714461372362</z>
-			<w>0.699674886931</w>
+			<z>0.013632085296</z>
+			<w>0.999907078808</w>
 		</orientation>
 	</point>
 </poses>

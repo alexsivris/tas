@@ -48,7 +48,21 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
     cvtColor(m_camImg,hsv_frame,COLOR_BGR2HSV);
 
     // Blue: 230 Hue, Green: 110 Hue
-    inRange(hsv_frame, Scalar(150,50, 50), Scalar(179, 255, 255), red_frame);
+    switch (_tpl.startype )
+    {
+    case StarType::RED:
+        inRange(hsv_frame, Scalar(0,150, 106), Scalar(20, 255, 174), red_frame);
+        break;
+    case StarType::BLUE:
+        inRange(hsv_frame, Scalar(0,150, 106), Scalar(20, 255, 174), red_frame);
+        break;
+    case StarType::GREEN:
+        inRange(hsv_frame, Scalar(0,150, 106), Scalar(20, 255, 174), red_frame);
+        break;
+    default:
+        inRange(hsv_frame, Scalar(0,150, 106), Scalar(20, 255, 174), red_frame);
+    }
+
 
 
     Mat er_kernel = Mat::ones(Size(10,10),CV_8UC1);
@@ -80,7 +94,7 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
 #ifdef DBG_2
         cout << "Best contour size: " << contours.at(idxBest).size()
              << " Center: " << center << " Area: " << contourArea(contours.at(idxBest)) << endl;
-        imshow(g_output_win, g_binary);
+        imshow("Output window", m_binary);
         imshow("BGR", m_camImg);
         waitKey(33);
         destroyAllWindows();
@@ -95,7 +109,7 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
         imshow("BGR", m_camImg);
         waitKey(33);
         destroyAllWindows();
-        imshow(g_output_win, g_binary);
+        imshow("Output window", m_binary);
 #endif
         return false;
 

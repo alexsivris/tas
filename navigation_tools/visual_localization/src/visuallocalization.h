@@ -36,7 +36,9 @@ const double pixelToCamResolution = cam_fov/image_width; /// pxl->deg in cam fov
 const double camToLaserResolution = laser_range/cam_fov; /// deg in cam fov -> deg in lidar
 }
 
-
+/**
+ * @brief The VisualLocalization class
+ */
 class VisualLocalization
 {
 public:
@@ -52,7 +54,8 @@ private:
     bool anyOfType(vector<TemplateImgData>& _tpl_vec,unsigned int &_id);
     unsigned int getRangeFromAngle(double &_angle);
     double convertPointToAngle(TemplateImgData& _pt);
-    void broadcastCameraFrame();
+    void broadcastOriginFrame();
+    void calculateOriginOrientation();
     Point2f estimatePosition(vector<LandmarkData> &_lm, float da, float db, float dc);
     void locateLandmarksInMap();
     void cbAmclPose(const geometry_msgs::PoseWithCovariance::ConstPtr &msg);
@@ -64,13 +67,15 @@ private:
 
     geometry_msgs::PoseArray m_particleCloud;
 
-    CarPosition m_carPosition;
+    CarPosition m_carOrigin;
 
     // tf stuff
     tf::Vector3 m_camPositionInBaseLink; ///< camera frame location relative to base link frame
     tf::TransformListener m_tfListener; ///< tf listener
+    tf::TransformBroadcaster m_originBroadcaster;
     // ros
     ros::NodeHandle &m_nh; ///< node handle
+    ros::Subscriber m_subScan;
     ros::Subscriber m_subAmclPose; ///< subscribe to pose estimation by amcl
     ros::Subscriber m_subCamImg; ///< subscribe to /usb_cam/image_raw
     ros::Subscriber m_subTplDetection; ///< subscriber to /tpl_detect
