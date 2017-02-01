@@ -7,6 +7,8 @@ add_definitions(-std=c++11)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  cmake_modules
+  #cv_bridge
   roscpp
   rospy
   std_msgs
@@ -189,15 +191,15 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+#find_package(OpenCV 2.4.13 REQUIRED)
+find_package(OpenCV 3 REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(landmarkdetector src/landmarkdetector.cpp src/landmarkdetector.h main.cpp)
 
-
 #add_executable(landmarkdetector src/landmarkdetector.cpp)
-target_link_libraries(landmarkdetector ${catkin_LIBRARIES})
-add_dependencies(landmarkdetector object_detection_generate_messages_cpp)
 
-find_package(OpenCV)
-include_directories(${OpenCV_INCLUDE_DIRS})
-target_link_libraries(landmarkdetector ${OpenCV_LIBRARIES})
+add_dependencies(landmarkdetector object_detection_generate_messages_cpp)
+target_link_libraries(landmarkdetector ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

@@ -1,32 +1,36 @@
 #include "landmarkdetector.h"
 
+/**
+ * @brief LandmarkDetector::LandmarkDetector create detector, descriptor and matcher objects for later use
+ */
 LandmarkDetector::LandmarkDetector(){
+    detector = SIFT::create(); // SIFT::create() || ORB::create()
+    extractor = SIFT::create(); // SIFT::create() || ORB::create()
 }
 
+/**
+ * @brief LandmarkDetector::computeTemplates detects keypoints and extract descriptors for all templates
+ * @param files
+ */
 void LandmarkDetector::computeTemplates(vector<String> files) {
-    Ptr<FeatureDetector> detector = ORB::create();
-    Ptr<DescriptorExtractor> extractor = ORB::create();
-
     for(int i=0; i < files.size(); i++) {
         Mat img = imread(files[i], CV_LOAD_IMAGE_GRAYSCALE);
         vector<KeyPoint> keypoints_tmp;
         Mat descriptors_tmp;
         detector->detect(img, keypoints_tmp);
         extractor->compute(img, keypoints_tmp, descriptors_tmp);
-        keypoints.push_back(keypoints_tmp);
+        keypoints_vec.push_back(keypoints_tmp);
         descriptors_vec.push_back(descriptors_tmp);
     }
 }
 
+/**
+ * @brief LandmarkDetector::detectLandmarks detects templates in the current camera image
+ * @param files
+ */
 void LandmarkDetector::detectLandmarks(vector<String> files) {
-    // ORB to detect and extract features
-    Ptr<FeatureDetector> detector = ORB::create();
-    Ptr<DescriptorExtractor> extractor = ORB::create();
-
-    Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce");
-
+    BFMatcher matcher(NORM_L2, true);
     Mat img_cam;
-
 
     VideoCapture cap;
     cap.open(0);
@@ -37,8 +41,7 @@ void LandmarkDetector::detectLandmarks(vector<String> files) {
         return;
     }
 
-    int foundId;
-    int foundCnt;
+    vector<int> foundCount(keypoints_vec.size());
 
     ros::NodeHandle nh;
     ros::Publisher msg_pub_;
@@ -56,89 +59,74 @@ void LandmarkDetector::detectLandmarks(vector<String> files) {
         Mat descriptors_cam;
         extractor->compute(img_cam, keypoints_cam, descriptors_cam);
 
+        // 3) match camera image with all available templates
         for(int i=0; i < descriptors_vec.size(); i++) {
 
-            Mat descriptors = descriptors_vec[i];
-            vector<KeyPoint> keypoints_object = keypoints[i];
+            // get keypoints and descriptors of current template
+            vector<KeyPoint> keypoints_template = keypoints_vec[i];
+            Mat descriptors_template = descriptors_vec[i];
 
+            // match using the matcher set in the constructor
             vector< DMatch > matches, good_matches;
-            matcher->match(descriptors, descriptors_cam, matches);
+            matcher.match(descriptors_template, descriptors_cam, matches);
 
-            // get only "good" matches
-            double max_dist = 0; double min_dist = 100;
-            for (int i = 0; i < descriptors.rows; i++){
-                double dist = matches[i].distance;
-                if (dist < min_dist) min_dist = dist;
-                if (dist > max_dist) max_dist = dist;
+            // get the image points of the matches
+            vector<int> queryIdxs( matches.size() ), trainIdxs( matches.size() );
+            for( size_t i = 0; i < matches.size(); i++ ) {
+                queryIdxs[i] = matches[i].queryIdx;
+                trainIdxs[i] = matches[i].trainIdx;
             }
-            for (int i = 0; i < descriptors.rows; i++){
-                if (matches[i].distance < 2.3 * min_dist){
-                    good_matches.push_back(matches[i]);
+            vector<Point2f> points1; KeyPoint::convert(keypoints_template, points1, queryIdxs);
+            vector<Point2f> points2; KeyPoint::convert(keypoints_cam, points2, trainIdxs);
+
+            // calculate homography matrix for the matched image points
+            Mat H12 = findHomography( Mat(points1), Mat(points2), CV_RANSAC, ransacReprojThreshold);
+            const double det = H12.at<double>(0,0) * H12.at<double>(1,1) - H12.at<double>(1,0) * H12.at<double>(0,1);
+
+            points1.clear();points2.clear();
+            KeyPoint::convert(keypoints_template, points1, queryIdxs);
+            KeyPoint::convert(keypoints_cam, points2, trainIdxs);
+
+            Mat points1t; // transformed points
+            perspectiveTransform(Mat(points1), points1t, H12);
+
+            vector<char> matchesMask( matches.size(), 0 );
+            double maxInlierDist = ransacReprojThreshold < 0 ? 3 : ransacReprojThreshold;
+            int inliersCnt = 0;
+            Point2f center(0,0);
+            for( int i = 0; i < points1.size(); i++ ){
+                if( norm(points2[i] - points1t.at<Point2f>((int)i,0)) <= maxInlierDist ){ // inlier
+                    matchesMask[i] = 1;
+                    inliersCnt++;
+                    center.x += points2[i].x;
+                    center.y += points2[i].y;
                 }
             }
+            center.x /= inliersCnt;
+            center.y /= inliersCnt;
 
-            if(good_matches.size() == 0) continue;
-
-             // get the keypoints of the good matches
-            std::vector<Point2f> good_pnts_template;
-            std::vector<Point2f> good_pnts_cam;
-            for (int i = 0; i < good_matches.size(); i++){
-                good_pnts_template.push_back(keypoints_object[good_matches[i].queryIdx].pt);
-                good_pnts_cam.push_back(keypoints_cam[good_matches[i].trainIdx].pt);
-            }
-
-            //cout << good_matches.size() << endl;
-
-
-            Mat maskInH;
-            Mat H = findHomography(good_pnts_template, good_pnts_cam, CV_RANSAC, 3, maskInH);
-
-            if(H.rows != 3 || H.cols != 3) continue;
-
-            const double det = H.at<double>(0,0) * H.at<double>(1,1) - H.at<double>(1,0) * H.at<double>(0,1);
-
-            // get inliers of homography and calculate first moment of the inlier keypoints
-            std::vector<Point2f> inliers;
-            Point2f cen(0,0);
-            for ( int i=0; i<good_pnts_cam.size(); i++ ){
-                if(maskInH.at<float>(i, 0) != 0){
-                    cen.x += good_pnts_cam[i].x;
-                    cen.y += good_pnts_cam[i].y;
-                    inliers.push_back(good_pnts_cam[i]);
-                }
-            }
-
-            // check if homography is good and has enough inliers
-            //cout << "Det " << det << " inliers " << inliers.size() << " good " << good_matches.size() << endl;
-            if(good_matches.size() > 15 || det > 0.1 && inliers.size() > 40) {
-                if(foundId != i){
-                    foundCnt = 0;
-                    foundId = i;
-                }
-                foundCnt ++;
-                if(foundCnt >= 2) {
-                    cout << "Found template nr. " << i << endl;
-                }
+            // check if homography has enough inliers
+            if(inliersCnt > 25){
+                cout << "Found template nr. " << i << " at Position <" << center.x << "," << center.y << endl;
 
                 // publish data on topic
                 object_detection::landmark msg;
                 msg.id = i;
-                msg.x = cen.x;
-                msg.y = cen.y;
+                msg.x = center.x;
+                msg.y = center.y;
                 msg_pub_.publish(msg);
                 ros::spinOnce();
              }
 
-            if(false) {
+#ifdef DRAW_MATCHES // draw matches and center of recognized landmark for debugging if wanted
                 Mat img_template = imread(files[i], CV_LOAD_IMAGE_GRAYSCALE);
                 Mat img_matches;
-                drawMatches( img_template, keypoints_object, img_cam, keypoints_cam,
-                             good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
-                             maskInH, DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
+                circle( img_cam , center, 30.0, Scalar( 0, 0, 255 ) );
+                drawMatches( img_template, keypoints_template, img_cam, keypoints_cam, matches, img_matches, CV_RGB(0, 255, 0), CV_RGB(0, 0, 255), matchesMask, DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
                 imshow("Matches", img_matches);
-                waitKey(100);
-            }
+                waitKey(10);
+#endif
 
         }
     }
