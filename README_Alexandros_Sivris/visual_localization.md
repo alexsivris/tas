@@ -9,6 +9,7 @@
 *	navigation_tools/visual_localization/src/landmarkmatcher.h
 *	navigation_tools/visual_localization/src/landmarkmatcher.cpp
 *	navigation_tools/visual_localization/src/my_types.h
+*	navigation_tools/launch/localization.launch
 
 #### Description ####
 In this node I calculate the pose estimate of the car using a non-linear system of three equations. These equations result from the circles drawn around the three detected landmarks with radius equal to the distance between the car and the corresponding landmark. This distance is read out from the laser scanner
