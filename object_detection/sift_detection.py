@@ -28,7 +28,7 @@ def sift_detector(new_image, image_template):
 cap = cv2.VideoCapture(0)
 
 # image template
-image_template = cv2.imread('Gripper3D-35.png', 0) 
+image_template = cv2.imread('biere.jpg', 0) 
 
 while True:
     ret, frame = cap.read()
