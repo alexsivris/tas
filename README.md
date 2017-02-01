@@ -139,12 +139,17 @@ In this file I did all the tests related to contour matching together with ORB i
 ### My contribution
 
 #### LandmarkDetector ####
+(object_detection/demo/SIFT_demo_matches.png) 
 
 ### Description ###
 This node is dedicated to our second task "Visual Localization". 
 
 In the node "landmarkdetector" of the package "object_detection" I recognize landmarks in our local environment using the given camera image of a simple RGB-Webcam. 
 For this purpose is used the algorithms SIFT/SURF/ORB to detect and describe keypoints in the image, and a Brute-Force-Matcher to match the detected keypoints with known templates. To improve the robustness, i calculate the homography matrix of the template in my camera image using RANSAC, to only consider inliers. 
+
+### Docu ###
+Further documentation of the code can be seen [here](object_detection/doc/html/index.html) 
+
 
 ### How to run the node ###
 To run the node I prepared a launch file within the folder "object_detection/launch", called "landmarkdetector.launch". In this launch file the paths to the template-image-files can be specified. After specifying these, the node can be started using the following syntax:
