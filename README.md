@@ -5,12 +5,6 @@ tas_car
 
 Please follow the intruction in tas/doc/Latex/LSR-TAS.pdf to setup and run the packages 
 
-tas_car
-=======
-
-## Basic setup for the TAS stack
-
-Please follow the intruction in tas/doc/Latex/LSR-TAS.pdf to setup and run the packages 
 
 # 1. Alexandros Sivris  #
 ### My contribution for the TAS project ###
