@@ -4,8 +4,8 @@
 #### Contents ####
 1. Navigation tools package
 	0. [Requirements](nav_tools_requirements.md) 
-	1. [Visual localization](visual_localization.md) 
-	2. [Map goals](map_goals.md) 
+	1. [Visual localization](visual_localization.md) (task 2)
+	2. [Map goals](map_goals.md) (task 1) 
 	3. [Waypoint setter (unfinished)](waypoint_setter.md) 
 	
 2. Prototypes
