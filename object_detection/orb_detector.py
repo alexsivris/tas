@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+cv2.__version__
 def ORB_detector(new_image, image_template):
     image1 = cv2.cvtColor(new_image, cv2.COLOR_BGR2GRAY)
 
@@ -17,10 +17,10 @@ def ORB_detector(new_image, image_template):
     
     matches = sorted(matches, key=lambda val: val.distance)
 
-    return len(matches)
+    return len(matches[:10])
 
 cap = cv2.VideoCapture(0)
-image_template = cv2.imread('box_in_scene.png', 0) 
+image_template = cv2.imread('biere.jpg', 0) 
 
 while True:
 
