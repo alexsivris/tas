@@ -13,4 +13,4 @@
 	2. [Template detection prototype using contours](detection_with_contours.md) 
 	3. [Template detection prototype using contours fusioned with ORB](detection_with_contours_and_orb.md) 
 	
-The complete documentation of the code can be seen [here](doc/) (download doc/ folder and open index.html in your web browser). 
+The complete documentation of the code can be seen [here](doc/) (download doc/ folder and open index.html in your web browser and click on Namespaces/Classes/Files in the menu). 
