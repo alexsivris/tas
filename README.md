@@ -6,7 +6,7 @@ tas_car
 Please follow the intruction in tas/doc/Latex/LSR-TAS.pdf to setup and run the packages 
 
 # Introduction
-In the following, we will present nodes that were written by members of group 1. Alexandros Sivris and Benjamin Braun worked on visual navigation, Philipp Schreiber and Juri Fedjaev worked on the Slalom node. Besides their individual contribution to the project, all members worked on the mapping of the N8 basement. 
+In the following, we will present nodes that were written by members of group 1. Alexandros Sivris and Benjamin Braun worked on visual navigation/ visual localization, Philipp Schreiber and Juri Fedjaev worked on the Slalom node. Besides their individual contribution to the project, all members worked on the mapping of the N8 basement. 
 
 # 1. The Slalom Course
 ### A contribution by Philipp Schreiber and Juri Fedjaev 
@@ -141,7 +141,7 @@ In this file I did all the tests related to contour matching together with ORB i
 ### My contribution
 
 #### LandmarkDetector ####
-(object_detection/demo/SIFT_demo_matches.png) 
+![](object_detection/demo/SIFT_demo_matches.png) 
 
 ### Description ###
 This node is dedicated to our second task "Visual Localization". 
