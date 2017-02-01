@@ -12,7 +12,7 @@ LandmarkDetector::LandmarkDetector(){
  * @brief LandmarkDetector::computeTemplates detects keypoints and extract descriptors for all templates
  * @param files
  */
-void LandmarkDetector::computeTemplates(vector<String> files) {
+void LandmarkDetector::computeTemplates(vector<string> files) {
     for(int i=0; i < files.size(); i++) {
         Mat img = imread(files[i], CV_LOAD_IMAGE_GRAYSCALE);
         vector<KeyPoint> keypoints_tmp;
@@ -28,7 +28,7 @@ void LandmarkDetector::computeTemplates(vector<String> files) {
  * @brief LandmarkDetector::detectLandmarks detects templates in the current camera image
  * @param files
  */
-void LandmarkDetector::detectLandmarks(vector<String> files) {
+void LandmarkDetector::detectLandmarks(vector<string> files) {
     BFMatcher matcher(NORM_L2, true);
     Mat img_cam;
 

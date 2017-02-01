@@ -25,12 +25,16 @@ using namespace cv;
 using namespace std;
 using namespace xfeatures2d;
 
+/**
+ * @brief The LandmarkDetector class 
+ * Class for detecting landmarks in the camera image using keypoint detectors/descriptors SIFT/SURF/ORB and BruteForceMatcher
+ */
 class LandmarkDetector
 {
 public:
     LandmarkDetector();
-    void computeTemplates(vector<String> files);
-    void detectLandmarks(vector<String> files);
+    void computeTemplates(vector<string> files);
+    void detectLandmarks(vector<string> files);
 private:
     vector<vector<KeyPoint> > keypoints_vec;
     vector<Mat> descriptors_vec;
