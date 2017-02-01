@@ -1,9 +1,10 @@
 ## 1. Navigation tools package ##
 ### Requirements ###
 As mentioned in the section [Visual localization](visual_localization.md)  the package requires the external packages:
-1. usb_cam
-2. hector_compressed_map_transport (optional, not recommended)
+1. usb_cam (https://github.com/bosch-ros-pkg/usb_cam.git)
+2. hector_compressed_map_transport (optional, not recommended, https://github.com/tu-darmstadt-ros-pkg/hector_slam.git)
 Further dependencies will be listed below
+
 #### Dependencies ####
 *	ROS Indigo running under Linux (14.04 LTS)
 *	OpenCV 3 (developed with OpenCV 3.2.0-dev)
