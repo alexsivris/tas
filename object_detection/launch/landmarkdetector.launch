@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+	<node pkg="object_detection"  type="landmarkdetector" name="landmarkdetector" output="screen">	
+		<param name="template_1" value="$(find object_detection)/resources/biere.jpg" />
+		<param name="template_2" value="$(find object_detection)/resources/tum.png" />
+		<param name="template_3" value="$(find object_detection)/resources/zaptros.png" />
+	</node>
+</launch>

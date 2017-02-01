@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+	<node pkg="navigation_tools"  type="visual_localization" name="visual_localization" output="screen">
+	
+		<param name="map_image" value="$(find navigation_tools)/resources/map2.jpg" />
+		<param name="use_map_image" value="true" />
+		<param name="lm_in_map_red" value="$(find navigation_tools)/resources/lm_red.png" />
+		<param name="lm_in_map_green" value="$(find navigation_tools)/resources/lm_green.png" />
+		<param name="lm_in_map_blue" value="$(find navigation_tools)/resources/lm_blue.png" />
+
+		<param name="tpl_in_map_red" value="$(find navigation_tools)/resources/red_star.png" />
+		<param name="tpl_in_map_green" value="$(find navigation_tools)/resources/green_star.png" />
+		<param name="tpl_in_map_blue" value="$(find navigation_tools)/resources/blue_star.png" />
+	</node>
+</launch>
