@@ -7,6 +7,7 @@
 *	navigation_tools/map_goals/src/XMLPoses.hpp
 *	navigation_tools/map_goals/src/send_nav_goals.h
 *	navigation_tools/map_goals/src/poses.xml
+*	naviagiton_tools/launch/autonomous_driving.launch
 
 #### Description ####
 In this node I publish the waypoints for autonomous navigation and send them to the action client. The waypoints are loaded from an XML file and their origin is the `nav_origin` frame. 
