@@ -7,7 +7,7 @@ Further dependencies will be listed below
 
 #### Dependencies ####
 *	ROS Indigo running under Linux (14.04 LTS)
-*	OpenCV 3 (developed with OpenCV 3.2.0-dev)
+*	OpenCV 3 (development with OpenCV 3.2.0-dev)
 *	cv_bridge package of vision opencv project (if not already installed, it can be fetched from https://github.com/ros-perception/vision_opencv.git)
 *	C/C++ compiler (development with gcc version 4.8.4)
 *	RapidXML library (already included in the package include folder, no need to download)
