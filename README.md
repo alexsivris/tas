@@ -133,3 +133,23 @@ In this file I did all the tests related to contour matching in OpenCV before im
 
 #### Description ####
 In this file I did all the tests related to contour matching together with ORB in OpenCV before implementing them in a ROS node. 
+
+
+# 3. Benjamin Braun
+### My contribution
+
+#### LandmarkDetector ####
+
+### Description ###
+This node is dedicated to our second task "Visual Localization". 
+
+In the node "landmarkdetector" of the package "object_detection" I recognize landmarks in our local environment using the given camera image of a simple RGB-Webcam. 
+For this purpose is used the algorithms SIFT/SURF/ORB to detect and describe keypoints in the image, and a Brute-Force-Matcher to match the detected keypoints with known templates. To improve the robustness, i calculate the homography matrix of the template in my camera image using RANSAC, to only consider inliers. 
+
+### How to run the node ###
+To run the node I prepared a launch file within the folder "object_detection/launch", called "landmarkdetector.launch". In this launch file the paths to the template-image-files can be specified. After specifying these, the node can be started using the following syntax:
+roslaunch object_detection landmarkdetector.launch
+
+### Dependencies ###
+*	ROS Indigo running under Linux (tested and developed under 16.04.01 LTS)
+*	OpenCV 3 (tested developed with OpenCV 3.2.0-dev)
