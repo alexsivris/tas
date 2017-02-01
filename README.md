@@ -13,7 +13,7 @@ tas_car
 Please follow the intruction in tas/doc/Latex/LSR-TAS.pdf to setup and run the packages 
 
 # 1. Alexandros Sivris  #
-### My contribution to the TAS project ###
+### My contribution for the TAS project ###
 ![](README_Alexandros_Sivris/rviz_screenshot_2017_02_01-09_33_44.png) 
 #### 1.1 Contents ####
 1. Navigation tools package
