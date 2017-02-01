@@ -36,7 +36,7 @@ Further dependencies will be listed below
 *	C/C++ compiler (development with gcc version 4.8.4)
 *	RapidXML library (already included in the package include folder, no need to download)
 
-### Visual Localization ###
+### Node: Visual Localization ###
 #### Files ####
 *	navigation_tools/visual_localization/main.cpp
 *	navigation_tools/visual_localization/src/visuallocalization.h
@@ -54,7 +54,7 @@ In this node I calculate the pose estimate of the car using a non-linear system 
 To run the node I prepared a launch file called `localization.launch` which is located in the "navigation_tools/launch" folder. The recommended way to run the node is by loading the map from an image file (which is set by default in line 5 of `localization.launch`). Alternatively, the map could also be fetched from the node `map_to_image_node` from the `ector_compressed_map_transport` package (this is not a good option though, because the map is very large and this would require that all the data is published on a ROS topic). 
 The node will start by finding the position of the loaded landmarks in the map and then it will wait for image data coming from the usb camera, which can be mounted on top of the car. Therefore, the package `usb_cam`  **must** be launched in order to receive image data in the topic "/usb_cam/image_raw".
 
-### Map goals ###
+### Node: Map goals ###
 #### Files ####
 *	navigation_tools/map_goals/src/main.cpp
 *	navigation_tools/map_goals/src/XMLPoses.cpp
@@ -70,7 +70,7 @@ In this node I publish the waypoints for autonomous navigation and send them to 
 Before running the map goals node, the `nav_origin` frame has to be broadcasted. Therefore, run the `visual_localization` node (`localization.launch`) *before* running the `map_goals` node. (`autonomous_driving.launch`). If the visual localization was not successful, set the argument `visual_localization_successful` in the `autonomous_driving.launch` file to **false** (default), otherwise to **true**. 
 ![](README_Alexandros_Sivris/nav-origin-with-waypoints.png) 
 
-### Waypoint setter ###
+### Node: Waypoint setter ###
 #### Files ####
 *	navigation_tools/waypoint_setter/main.cpp
 *	navigation_tools/waypoint_setter/src/waypointsetter.cpp
@@ -83,7 +83,7 @@ This node is a tool for setting the waypoint poses for the `map_goals` node, i.e
 This node cannot be run, because it isn't finished yet.
 
 ## 1.1.2 Prototypes ##
-### Visual localization demo ###
+### Node: Visual localization demo ###
 #### Files ####
 *	protoypes/template_matching/src/main.cpp
 *	protoypes/template_matching/resources/map2.jpg
