@@ -154,8 +154,8 @@ Further documentation of the code can be seen [here](object_detection/doc/html/i
 
 
 ### How to run the node ###
-To run the node I prepared a launch file within the folder "object_detection/launch", called "landmarkdetector.launch". In this launch file the paths to the template-image-files can be specified. After specifying these, the node can be started using the following syntax:
-roslaunch object_detection landmarkdetector.launch
+To run the node I prepared a launch file within the folder "object_detection/launch", called 'landmarkdetector.launch'. In this launch file the paths to the template-image-files can be specified. After specifying these, the node can be started using the following syntax:
+'roslaunch object_detection landmarkdetector.launch'
 
 ### Dependencies ###
 *	ROS Indigo running under Linux (tested and developed under 16.04.01 LTS)
