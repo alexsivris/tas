@@ -26,7 +26,7 @@ To run the node we prepared a launch file called `slalom.launch` which is locate
 # 2. Alexandros Sivris  #
 ### My contribution for the TAS project ###
 ![](README_Alexandros_Sivris/rviz_screenshot_2017_02_01-09_33_44.png) 
-#### 1.1 Contents ####
+#### 2.1 Contents ####
 1. Navigation tools package
 	0. Requirements
 	1. Visual localization
@@ -40,7 +40,7 @@ To run the node we prepared a launch file called `slalom.launch` which is locate
 	
 The complete documentation of the code can be seen [here](README_Alexandros_Sivris/doc/index.html) 
 
-## 1.1.1 Navigation tools package ##
+## 2.1.1 Navigation tools package ##
 ### Requirements ###
 As mentioned in the section [Visual localization](visual_localization.md)  the package requires the external packages:
 1. usb_cam
@@ -99,7 +99,7 @@ This node is a tool for setting the waypoint poses for the `map_goals` node, i.e
 #### How to run the node ####
 This node cannot be run, because it isn't finished yet.
 
-## 1.1.2 Prototypes ##
+## 2.1.2 Prototypes ##
 ### Node: Visual localization demo ###
 #### Files ####
 *	protoypes/template_matching/src/main.cpp
@@ -126,7 +126,8 @@ The waypoints are shown in the colored point cloud (displayed as spheres) and th
 *	prototypes/detection/detection_color_masks.cpp
 
 #### Description ####
-In this file I did all the tests related to contour matching in OpenCV before implementing them in a ROS node. 
+In this file I did all the tests related to contour matching in OpenCV before implementing them in a ROS node. The image below shows how the car would perceive the templates in the given environment.
+![](README_Alexandros_Sivris/templates-in-cam-img.JPG)
 
 ### Template detection prototype using contours fusioned with ORB ###
 
