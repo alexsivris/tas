@@ -1,5 +1,9 @@
 #include "waypointsetter.h"
 
+/**
+ * @brief WaypointSetter::WaypointSetter prepare subscriber (initialpose) and publisher (waypoints_set)
+ * @param _nh node handle
+ */
 WaypointSetter::WaypointSetter(ros::NodeHandle &_nh) :
     m_nh(_nh)
 {
@@ -9,6 +13,11 @@ WaypointSetter::WaypointSetter(ros::NodeHandle &_nh) :
     m_pA.header.stamp = ros::Time::now();
 }
 
+/**
+ * @brief WaypointSetter::capture loop until user decides to end the process by pressing Ctrl+C.
+ * Then, the poses are saved in an XML file (which hasn't been done) that can be used by the map_goals node
+ * for autonomous driving.
+ */
 void WaypointSetter::capture()
 {
     ros::Rate rt(100);
@@ -17,8 +26,13 @@ void WaypointSetter::capture()
         ros::spinOnce();
         rt.sleep();
     }
+    // TODO: save all poses to xml file
 }
 
+/**
+ * @brief WaypointSetter::cbPose Callback function executed when an initialpose is set
+ * @param msg
+ */
 void WaypointSetter::cbPose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg)
 {
     ROS_INFO("RECEIVED!");

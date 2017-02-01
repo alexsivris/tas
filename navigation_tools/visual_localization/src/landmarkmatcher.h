@@ -12,7 +12,8 @@ using namespace cv;
 using namespace std;
 
 /**
- * @brief The LandmarkMatcher class
+ * @brief The LandmarkMatcher class find landmark positions in the map using template matching
+ * from OpenCV.
  */
 class LandmarkMatcher
 {
@@ -22,9 +23,9 @@ private:
     void publishCoordinates(vector<LandmarkData> &_tvec);
     void findLandmarks();
 
-    Mat & m_src;
-    vector<LandmarkData> &m_tpl;
-    ros::Publisher &m_lmPub;
+    Mat & m_src; ///< image source of map
+    vector<LandmarkData> &m_tpl; ///< vector of landmark patches used for template matching
+    ros::Publisher &m_lmPub; ///< publisher of landmark positions
 };
 
 #endif // LANDMARKMATCHER_H

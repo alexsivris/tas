@@ -1,16 +1,38 @@
 #include "send_nav_goals.h"
 
-NavGoals::NavGoals(MoveBaseClient &_ac, ros::NodeHandle & _nh, string &_filename, string &_frameid) :
+/**
+ * @brief NavGoals::NavGoals constructor of NavGoals class. Two publishers corresponding to the waypoints
+ * and their markers are prepared for visualization purposes. The waypoints are fetched from an XMLPoses class object.
+ * @param _ac move base client
+ * @param _nh node handle
+ * @param _filename XML file that contains all the poses
+ * @param _frameid all waypoints are based on this frame
+ */
+NavGoals::NavGoals(MoveBaseClient &_ac, ros::NodeHandle & _nh, string _filename, string _frameid) :
     ac(_ac), m_nh(_nh), m_fileName(_filename), m_frameId(_frameid)
 {
     m_pubWaypoints = m_nh.advertise<geometry_msgs::PoseArray>("tas_nav_goals",15);
     m_pubMarkers = m_nh.advertise<visualization_msgs::Marker>("waypoint_markers",1);
-    //some init
+
     m_xml = new XMLPoses(m_fileName, m_frameId, m_nh);
     m_xml->getWaypoints(m_poseArray, waypoints);
+#ifdef DBG
     ROS_INFO("%s", m_frameId.c_str());
+#endif
 }
 
+/**
+ * @brief NavGoals::~NavGoals free the memory allocated for the XMLPoses object
+ */
+NavGoals::~NavGoals()
+{
+    delete m_xml;
+}
+
+/**
+ * @brief NavGoals::startGoalsProcess Process loop in which the waypoints and their markers
+ * are published and the corresponding goals are sent to the action client.
+ */
 void NavGoals::startGoalsProcess()
 {
     ros::Rate loop_rate(5);
@@ -19,12 +41,15 @@ void NavGoals::startGoalsProcess()
         // SEND GOALS HERE
         prepareMarkers();
         publishWaypoints();
-        //sendGoals();
+        sendGoals();
         ros::spinOnce();
         loop_rate.sleep();
     }
 }
-// markers for waypoints
+
+/**
+ * @brief NavGoals::prepareMarkers prepare style of markers for visualization in rviz
+ */
 void NavGoals::prepareMarkers()
 {
     m_marker.header.frame_id = m_frameId;
@@ -37,8 +62,10 @@ void NavGoals::prepareMarkers()
         m_marker.type = shape;
         m_marker.action = visualization_msgs::Marker::ADD;
         m_marker.pose = waypoints.at(i);
+
         stringstream conv;
         conv << i+1;
+
         m_marker.text = conv.str();
         m_marker.scale.x = 1.0;
         m_marker.scale.y = 1.0;
@@ -57,7 +84,9 @@ void NavGoals::prepareMarkers()
 
 }
 
-// publish waypoints to tas_nav_goals
+/**
+ * @brief NavGoals::publishWaypoints publish the waypoints onto the topic "tas_nav_goals" as a pose array (for visualization)
+ */
 void NavGoals::publishWaypoints()
 {
     m_poseArray.header.stamp = ros::Time::now();
@@ -65,6 +94,9 @@ void NavGoals::publishWaypoints()
 
 }
 
+/**
+ * @brief NavGoals::sendGoals send waypoints which have been read from an XML file to the movebase client.
+ */
 void NavGoals::sendGoals()
 {
     publishWaypoints();
@@ -80,6 +112,7 @@ void NavGoals::sendGoals()
         ROS_INFO("Sending goal");
         ac.sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
         ac.waitForResult();
+        publishWaypoints();
 
         if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
             ROS_INFO("The base moved to %d goal", i);

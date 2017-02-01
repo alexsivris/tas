@@ -1,14 +1,18 @@
 #include "XMLPoses.hpp"
 
+/**
+ * @brief XMLPoses::XMLPoses In the constructor the XML file is loaded and the necessary member variables
+ * are initialized.
+ * @param _filename XML file name
+ * @param _frameid frame specifier for waypoints
+ * @param _nh node handle
+ */
 XMLPoses::XMLPoses(string &_filename, string &_frameid, ros::NodeHandle &_nh) :
     m_fileName(_filename), m_nh(_nh), m_frameId(_frameid)
 {
-    if (m_fileName.empty())
-        m_fileName = "/home/alex/TAS/catkin_ws/src/tas_group_1/tas_map_goals/poses/poses.xml";
-    if (m_frameId.empty())
-        m_frameId = "/nav_origin";
-
+#ifdef DBG
     cout << "Filename: " <<  m_fileName << endl;
+#endif
 
     try {
         loadXmlFile();
@@ -21,6 +25,12 @@ XMLPoses::XMLPoses(string &_filename, string &_frameid, ros::NodeHandle &_nh) :
 
 }
 
+/**
+ * @brief XMLPoses::getWaypoints assigns the waypoints that have been read out from the XML file to a
+ * pose array and a pose vector. These are the "outputs" of this class.
+ * @param _posearray reference to pose array
+ * @param _waypoints reference to pose vector
+ */
 void XMLPoses::getWaypoints(geometry_msgs::PoseArray &_posearray, vector<geometry_msgs::Pose> &_waypoints)
 {
     _posearray = m_poseArray;
@@ -28,6 +38,10 @@ void XMLPoses::getWaypoints(geometry_msgs::PoseArray &_posearray, vector<geometr
 
 }
 
+/**
+ * @brief XMLPoses::fetchXmlDom This is the core method of the class XMLPoses. In this method the XML tree
+ * is traversed: the poses are extracted from it and saved into the pose array/vector of poses.
+ */
 void XMLPoses::fetchXmlDom()
 {
     geometry_msgs::Pose waypoint;
@@ -68,6 +82,9 @@ void XMLPoses::fetchXmlDom()
     }
 }
 
+/**
+ * @brief XMLPoses::loadXmlFile helper method to load the XML file
+ */
 void XMLPoses::loadXmlFile()
 {
     ifstream theFile (m_fileName);

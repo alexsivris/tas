@@ -1,9 +1,14 @@
 #include "landmarkmatcher.h"
 
+/**
+ * @brief LandmarkMatcher::LandmarkMatcher constructor only calls findLandmark method for template matching
+ * @param _src
+ * @param _tpl
+ * @param _pub
+ */
 LandmarkMatcher::LandmarkMatcher(Mat &_src, vector<LandmarkData> &_tpl, ros::Publisher &_pub) :
     m_src(_src), m_tpl(_tpl), m_lmPub(_pub)
 {
-
     findLandmarks();
 }
 
