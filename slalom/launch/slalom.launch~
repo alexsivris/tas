@@ -1,0 +1,3 @@
+<launch>
+  <node name="slalom_node" pkg="slalom" type="slalom_node" output="screen" />  
+</launch>
