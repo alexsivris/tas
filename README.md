@@ -12,13 +12,15 @@ In the following, we will present nodes that were written by members of group 1.
 ### A contribution by Philipp Schreiber and Juri Fedjaev 
 
 #### Description ####
-This node is dedicated to the slalom task, as described in the document "TAS_task_description.pdf". The
+This node is dedicated to the slalom task, as described in the document "/prototypes/slalom/TAS_task_description.pdf". The outline of the setup is shown in the figure below: 
+![](prototypes/slalom/setup_slalom.png) 
 
-In this node I calculate the pose estimate of the car using a non-linear system of three equations. These equations result from the circles drawn around the three detected landmarks with radius equal to the distance between the car and the corresponding landmark. This distance is read out from the laser scanner
+In order to drive the slalom course, we set navigation goals next to each position of the traffic cones. As the odometry of the TAS car is very poor, we use data from the laser scanner to imrpove our pose estimate when arriving at the goals. For that purpose, we defined a simple state machine, as may be seen in the figure below:
+![](prototypes/slalom/tas_slalom_lidar_fsm.png) 
 
 #### How to run the node ####
-To run the node I prepared a launch file called `localization.launch` which is located in the "navigation_tools/launch" folder. The recommended way to run the node is by loading the map from an image file (which is set by default in line 5 of `localization.launch`). Alternatively, the map could also be fetched from the node `map_to_image_node` from the `ector_compressed_map_transport` package (this is not a good option though, because the map is very large and this would require that all the data is published on a ROS topic). 
-The node will start by finding the position of the loaded landmarks in the map and then it will wait for image data coming from the usb camera, which can be mounted on top of the car. Therefore, the package `usb_cam`  **must** be launched in order to receive image data in the topic "/usb_cam/image_raw".
+To run the node we prepared a launch file called `slalom.launch` which is located in the "slalom/launch" folder.  There are no external packages needed. The node works out of the box with the basic ROS navigation stack installed. 
+
 
 
 # 2. Alexandros Sivris  #
