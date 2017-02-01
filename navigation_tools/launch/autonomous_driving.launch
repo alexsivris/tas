@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="visual_localization_successful" value="false" />
+	<node pkg="tf" type="static_transform_publisher" name="nav_origin_tf" args="24.0 0 0 0 0 0 /map /nav_origin 10" unless="$(arg visual_localization_successful)"/> 
+	<node pkg="navigation_tools"  type="map_goals" name="map_goals" output="screen">
+		<param name="poses_filename" value="$(find navigation_tools)/map_goals/poses/poses.xml" />
+		<param name="poses_frameid" value="/nav_origin" />
+	</node>
+</launch>

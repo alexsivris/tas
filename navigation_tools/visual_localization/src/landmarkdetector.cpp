@@ -1,15 +1,31 @@
 #include "landmarkdetector.h"
 
+/**
+ * @brief LandmarkDetector::LandmarkDetector initialization of threshold value for binary representation of image
+ * to 128.
+ */
 LandmarkDetector::LandmarkDetector() :
     m_threshold(128)
 {
 
 }
+
+/**
+ * @brief LandmarkDetector::getStarId return the resulting template id
+ * @return
+ */
 unsigned int LandmarkDetector::getStarId()
 {
     return m_result.id;
 }
 
+/**
+ * @brief LandmarkDetector::foundTemplate returns true if the template is found in the camera image.
+ * To improve the efficiency of the algorithm the search space is reduced by using HSV color masks.
+ * @param _img camera source image
+ * @param _tpl template to be inspected
+ * @return
+ */
 bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
 {
     m_camImg = _img;
@@ -30,8 +46,6 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
     // coud be done with switch case..
     int strongContour = 2; // mario 31 red_star 2
 
-
-
     m_result.startype = _tpl.startype;
     cv::findContours(tpl_binary,m_tplContours,cv::noArray(),cv::RETR_LIST,cv::CHAIN_APPROX_SIMPLE);
     tpl_binary = cv::Scalar::all(0);
@@ -47,7 +61,7 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
     // search in img
     cvtColor(m_camImg,hsv_frame,COLOR_BGR2HSV);
 
-    // Blue: 230 Hue, Green: 110 Hue
+    // Color masking
     switch (_tpl.startype )
     {
     case StarType::RED:
@@ -63,7 +77,7 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
         inRange(hsv_frame, Scalar(0,150, 106), Scalar(20, 255, 174), red_frame);
     }
 
-    Mat er_kernel = Mat::ones(Size(10,10),CV_8UC1);
+    Mat er_kernel = Mat::ones(Size(3,3),CV_8UC1);
     // filter noise
     erode(red_frame,red_frame,er_kernel);
     dilate(red_frame,red_frame,Mat());
@@ -114,6 +128,10 @@ bool LandmarkDetector::foundTemplate(Mat &_img, LoadedTemplateData &_tpl)
     }
 }
 
+/**
+ * @brief LandmarkDetector::locate assign m_result to result of calculation.
+ * @return result
+ */
 TemplateImgData LandmarkDetector::locate()
 {
     m_result.u = m_center.x;
@@ -121,6 +139,13 @@ TemplateImgData LandmarkDetector::locate()
     return m_result;
 }
 
+/**
+ * @brief LandmarkDetector::findBestMatch check if contour of template matches to any contour in the masked image.
+ * @param _img_cnt all the contours in the masked image
+ * @param _tpl_strong_cnt template contour (star shape)
+ * @param _tpl_hist histogram of template
+ * @return id of best match
+ */
 int LandmarkDetector::findBestMatch(vector< vector< Point> > &_img_cnt, vector< Point> &_tpl_strong_cnt, Mat &_tpl_hist)
 {
     int best=NO_GOOD_MATCH;
@@ -129,8 +154,8 @@ int LandmarkDetector::findBestMatch(vector< vector< Point> > &_img_cnt, vector< 
     for (int i=0; i<_img_cnt.size();i++)
     {
         if (matchShapes(_img_cnt.at(i),_tpl_strong_cnt,CV_CONTOURS_MATCH_I1,2) < dist
-                && contourArea(_img_cnt.at(i)) >= 800
-                && contourArea(_img_cnt.at(i)) <= 50000 && contourArea(_img_cnt.at(i)) >= 100 )
+                && contourArea(_img_cnt.at(i)) >= 70
+                && contourArea(_img_cnt.at(i)) <= 50000 )
         {
             dist = matchShapes(_img_cnt.at(i),_tpl_strong_cnt,CV_CONTOURS_MATCH_I1,2);
             cv::minAreaRect(_img_cnt.at(i));

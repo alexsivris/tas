@@ -1,18 +1,27 @@
 #include <iostream>
 #include <ros/ros.h>
 #include "send_nav_goals.h"
-int main(int argc, char** argv){
-    ros::init(argc, argv, "map_goals"); // init and set name
-    ros::NodeHandle nh;
 
-    // Parse params
+/**
+ * @brief main Load XML filename and frame id from parameters in the autonomous_driving.launch
+ * file and start NavGoals process.
+ * @param argc
+ * @param argv
+ * @return
+ */
+int main(int argc, char** argv){
+    ros::init(argc, argv, "map_goals");
+    ros::NodeHandle nh("~");
+
     string xmlFileName, xmlFrameId;
-    //nh.param("xml_poses_filename", xmlFileName);
-    //nh.param("xml_poses_frameid", xmlFrameId);
-    xmlFileName = "/home/alex/TAS/beta_test/src/navigation_tools/map_goals/poses/poses.xml";
-    xmlFrameId = "/nav_origin";
-    // send navigation goals
-    MoveBaseClient ac("move_base", true); // action client to spin a thread by default
+    nh.getParam("poses_filename", xmlFileName);
+    nh.getParam("poses_frameid", xmlFrameId);
+#ifdef DBG
+    cout << "XML FILE:" <<  xmlFileName << endl;
+    cout << "FRAME ID:" <<  xmlFrameId << endl;
+#endif
+
+    MoveBaseClient ac("move_base", true);
     NavGoals ng(ac,nh,xmlFileName, xmlFrameId);
     ng.startGoalsProcess();
 
