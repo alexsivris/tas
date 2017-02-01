@@ -10,6 +10,7 @@
 *	protoypes/template_matching/launch/visual_localization_demo.launch
 *	protoypes/template_matching/CMakeLists.txt
 *	protoypes/template_matching/demo.rviz
+
 #### Description ####
 The correctness of the visual localization algorithm is proven in this demo.
 
