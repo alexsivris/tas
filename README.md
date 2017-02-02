@@ -20,7 +20,7 @@ In the following, we will present nodes that were written by members of group 1.
 
 #### Description ####
 This node is dedicated to the slalom task, as described in the document "/prototypes/slalom/TAS_task_description.pdf". The outline of the setup is shown in the figure below: 
-![](prototypes/slalom/setup_slalom.png) 
+![](README_Alexandros_Sivris/rviz_screenshot_2017_02_01-09_33_44.png) 
 
 In order to drive the slalom course, we set navigation goals next to each position of the traffic cones. As the odometry of the TAS car is very poor, we use data from the laser scanner to imrpove our pose estimate when arriving at the goals. For that purpose, we defined a simple state machine, as may be seen in the figure below:
 ![](prototypes/slalom/tas_slalom_lidar_fsm.png) 
