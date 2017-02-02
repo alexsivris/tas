@@ -22,8 +22,8 @@ In the following, we will present nodes that were written by members of group 1.
 This node is dedicated to the slalom task, as described in the document "/prototypes/slalom/TAS_task_description.pdf". The outline of the setup is shown in the figure below: 
 ![](slalom/raw_material/slalom_task.png) 
 
-In order to drive the slalom course, we set navigation goals next to each position of the traffic cones. As the odometry of the TAS car is very poor, we use data from the laser scanner to imrpove our pose estimate when arriving at the goals. For that purpose, we defined a simple state machine, as may be seen in the figure below:
-![](prototypes/slalom/tas_slalom_lidar_fsm.raw_materialpng) 
+In order to drive the slalom course, we set navigation goals next to each position of the traffic cones. As the odometry of the TAS car is very poor, we use data from the laser scanner to improve our pose estimate when arriving at the goals. For that purpose, we defined a simple state machine, as may be seen in the figure below:
+![](slalom/raw_material/state_machine.png) 
 
 #### How to run the node ####
 To run the node we prepared a launch file called `slalom.launch` which is located in the "slalom/launch" folder.  There are no external packages needed. The node works out of the box with the basic ROS navigation stack installed. 
