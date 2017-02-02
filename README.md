@@ -11,6 +11,13 @@ In the following, we will present nodes that were written by members of group 1.
 # 1. The Slalom Course
 ### A contribution by Philipp Schreiber and Juri Fedjaev 
 
+#### Files ####
+*	slalom/include/slalom.h
+*	slalom/launch/slalom.launch
+*	slalom/nodes/slalom_node.cpp
+*	slalom/src/main.cpp
+*	slalom/src/slalom.cpp
+
 #### Description ####
 This node is dedicated to the slalom task, as described in the document "/prototypes/slalom/TAS_task_description.pdf". The outline of the setup is shown in the figure below: 
 ![](prototypes/slalom/setup_slalom.png) 
