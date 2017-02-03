@@ -14,15 +14,17 @@ int main(int argc, char** argv){
     ros::NodeHandle nh("~");
 
     string xmlFileName, xmlFrameId;
+    bool bsendGoals;
     nh.getParam("poses_filename", xmlFileName);
     nh.getParam("poses_frameid", xmlFrameId);
+    nh.getParam("send_goals", bsendGoals);
 #ifdef DBG
     cout << "XML FILE:" <<  xmlFileName << endl;
     cout << "FRAME ID:" <<  xmlFrameId << endl;
 #endif
 
     MoveBaseClient ac("move_base", true);
-    NavGoals ng(ac,nh,xmlFileName, xmlFrameId);
+    NavGoals ng(ac,nh,xmlFileName, xmlFrameId,bsendGoals);
     ng.startGoalsProcess();
 
     return 0;

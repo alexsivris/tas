@@ -20,7 +20,7 @@ using namespace std;
 class NavGoals
 {
 public:
-    NavGoals(MoveBaseClient &_ac,ros::NodeHandle &_nh, string _filename, string _frameid);
+    NavGoals(MoveBaseClient &_ac,ros::NodeHandle &_nh, string _filename, string _frameid, bool _sg);
     ~NavGoals();
     void startGoalsProcess();
 private:
@@ -32,6 +32,7 @@ private:
     static void activeCb();
     static void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback);
 
+    bool m_sendGoals; ///< flag that is set when the waypoints should be sent to the move base
     string m_fileName; ///< XML file that contains all waypoints
     string m_frameId; ///< frame specifier for waypoints (typically "/nav_origin")
     vector<geometry_msgs::Pose> waypoints; ///< vector of all loaded waypoints

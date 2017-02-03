@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+	<node pkg="map_server" type="map_server" name="map_server" args="$(find template_matching)/map_server/map2.yaml" />
+	<node pkg="tf" type="static_transform_publisher" name="nav_origin_tf" args="24.0 0 0 0 0 0 /map /nav_origin 10" /> 
+	<node pkg="navigation_tools"  type="waypoint_setter" name="waypoint_setter" output="screen">
+	</node>
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find navigation_tools)/waypoint_setter/waypointsetter.rviz" />
+</launch>

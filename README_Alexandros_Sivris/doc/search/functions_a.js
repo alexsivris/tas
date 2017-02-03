@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['navgoals',['NavGoals',['../classNavGoals.html#a065f106c8f8336cf11f0e2978496660b',1,'NavGoals']]]
+  ['navgoals',['NavGoals',['../classNavGoals.html#ab09069b463473625bcfc6526384018c6',1,'NavGoals']]]
 ];

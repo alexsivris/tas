@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['saveposestoxml',['savePosesToXml',['../classWaypointSetter.html#ae8a361de96cda12762eb81096d502854',1,'WaypointSetter']]],
   ['scene_5fdescriptors',['scene_descriptors',['../color__masks__and__orb_8cpp.html#a90bf491b6f9a68c1e4c63f6093b49877',1,'color_masks_and_orb.cpp']]],
   ['scene_5fdetector',['scene_detector',['../color__masks__and__orb_8cpp.html#a18473ad3cbd563355c1dc9e4524edc11',1,'color_masks_and_orb.cpp']]],
   ['scene_5fextractor',['scene_extractor',['../color__masks__and__orb_8cpp.html#a33ec5006a54f518dc4c2f5f199e56e9a',1,'color_masks_and_orb.cpp']]],

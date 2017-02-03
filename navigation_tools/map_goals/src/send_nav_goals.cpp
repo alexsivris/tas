@@ -8,8 +8,8 @@
  * @param _filename XML file that contains all the poses
  * @param _frameid all waypoints are based on this frame
  */
-NavGoals::NavGoals(MoveBaseClient &_ac, ros::NodeHandle & _nh, string _filename, string _frameid) :
-    ac(_ac), m_nh(_nh), m_fileName(_filename), m_frameId(_frameid)
+NavGoals::NavGoals(MoveBaseClient &_ac, ros::NodeHandle & _nh, string _filename, string _frameid, bool _sg) :
+    ac(_ac), m_nh(_nh), m_fileName(_filename), m_frameId(_frameid), m_sendGoals(_sg)
 {
     m_pubWaypoints = m_nh.advertise<geometry_msgs::PoseArray>("tas_nav_goals",15);
     m_pubMarkers = m_nh.advertise<visualization_msgs::Marker>("waypoint_markers",1);
@@ -41,7 +41,8 @@ void NavGoals::startGoalsProcess()
         // SEND GOALS HERE
         prepareMarkers();
         publishWaypoints();
-        sendGoals();
+        if (m_sendGoals)
+            sendGoals();
         ros::spinOnce();
         loop_rate.sleep();
     }
@@ -102,8 +103,10 @@ void NavGoals::sendGoals()
     publishWaypoints();
     while (!ac.waitForServer(ros::Duration(5.0))) {
         ROS_INFO("Waiting for the move_base action server to come up");
+        ros::spinOnce();
     }
-
+    publishWaypoints();
+    ros::spinOnce();
     move_base_msgs::MoveBaseGoal goal;
     goal.target_pose.header.frame_id = m_frameId;
     for(int i = 0; i < waypoints.size(); ++i) {

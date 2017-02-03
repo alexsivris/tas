@@ -99,9 +99,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a065f106c8f8336cf11f0e2978496660b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNavGoals.html#a065f106c8f8336cf11f0e2978496660b">NavGoals</a> (<a class="el" href="send__nav__goals_8h.html#a21e20cc0b6656ae897b3cbb969b93241">MoveBaseClient</a> &amp;_ac, ros::NodeHandle &amp;_nh, string _filename, string _frameid)</td></tr>
-<tr class="memdesc:a065f106c8f8336cf11f0e2978496660b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classNavGoals.html#a065f106c8f8336cf11f0e2978496660b" title="NavGoals::NavGoals constructor of NavGoals class. Two publishers corresponding to the waypoints and t...">NavGoals::NavGoals</a> constructor of <a class="el" href="classNavGoals.html" title="The NavGoals class In this class the waypoints are sent to the action client. They are also publihed ...">NavGoals</a> class. Two publishers corresponding to the waypoints and their markers are prepared for visualization purposes. The waypoints are fetched from an <a class="el" href="classXMLPoses.html" title="The XMLPoses class In this clas the waypoints are read from an XML file and saved into a vector...">XMLPoses</a> class object.  <a href="#a065f106c8f8336cf11f0e2978496660b">More...</a><br/></td></tr>
-<tr class="separator:a065f106c8f8336cf11f0e2978496660b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab09069b463473625bcfc6526384018c6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNavGoals.html#ab09069b463473625bcfc6526384018c6">NavGoals</a> (<a class="el" href="send__nav__goals_8h.html#a21e20cc0b6656ae897b3cbb969b93241">MoveBaseClient</a> &amp;_ac, ros::NodeHandle &amp;_nh, string _filename, string _frameid, bool _sg)</td></tr>
+<tr class="memdesc:ab09069b463473625bcfc6526384018c6"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classNavGoals.html#ab09069b463473625bcfc6526384018c6" title="NavGoals::NavGoals constructor of NavGoals class. Two publishers corresponding to the waypoints and t...">NavGoals::NavGoals</a> constructor of <a class="el" href="classNavGoals.html" title="The NavGoals class In this class the waypoints are sent to the action client. They are also publihed ...">NavGoals</a> class. Two publishers corresponding to the waypoints and their markers are prepared for visualization purposes. The waypoints are fetched from an <a class="el" href="classXMLPoses.html" title="The XMLPoses class In this clas the waypoints are read from an XML file and saved into a vector...">XMLPoses</a> class object.  <a href="#ab09069b463473625bcfc6526384018c6">More...</a><br/></td></tr>
+<tr class="separator:ab09069b463473625bcfc6526384018c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac79a81be5bafbaa596d0e51757537c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNavGoals.html#aac79a81be5bafbaa596d0e51757537c7">~NavGoals</a> ()</td></tr>
 <tr class="memdesc:aac79a81be5bafbaa596d0e51757537c7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classNavGoals.html#aac79a81be5bafbaa596d0e51757537c7" title="NavGoals::~NavGoals free the memory allocated for the XMLPoses object. ">NavGoals::~NavGoals</a> free the memory allocated for the <a class="el" href="classXMLPoses.html" title="The XMLPoses class In this clas the waypoints are read from an XML file and saved into a vector...">XMLPoses</a> object.  <a href="#aac79a81be5bafbaa596d0e51757537c7">More...</a><br/></td></tr>
 <tr class="separator:aac79a81be5bafbaa596d0e51757537c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -134,6 +134,9 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:ad278eebbad9be819f291d0514cf7cc86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNavGoals.html#ad278eebbad9be819f291d0514cf7cc86">m_sendGoals</a></td></tr>
+<tr class="memdesc:ad278eebbad9be819f291d0514cf7cc86"><td class="mdescLeft">&#160;</td><td class="mdescRight">flag that is set when the waypoints should be sent to the move base  <a href="#ad278eebbad9be819f291d0514cf7cc86">More...</a><br/></td></tr>
+<tr class="separator:ad278eebbad9be819f291d0514cf7cc86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80f22382b68e573116e826faf4b1474c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNavGoals.html#a80f22382b68e573116e826faf4b1474c">m_fileName</a></td></tr>
 <tr class="memdesc:a80f22382b68e573116e826faf4b1474c"><td class="mdescLeft">&#160;</td><td class="mdescRight">XML file that contains all waypoints.  <a href="#a80f22382b68e573116e826faf4b1474c">More...</a><br/></td></tr>
 <tr class="separator:a80f22382b68e573116e826faf4b1474c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,7 +170,7 @@ Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classNavGoals.html" title="The NavGoals class In this class the waypoints are sent to the action client. They are also publihed ...">NavGoals</a> class In this class the waypoints are sent to the action client. They are also publihed onto the topic "tas_nav_goals" (with markers on "waypoint_markers") so that they can be visualized in Rviz. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a065f106c8f8336cf11f0e2978496660b"></a>
+<a class="anchor" id="ab09069b463473625bcfc6526384018c6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -193,7 +196,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>_frameid</em>&#160;</td>
+          <td class="paramname"><em>_frameid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_sg</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -203,7 +212,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classNavGoals.html#a065f106c8f8336cf11f0e2978496660b" title="NavGoals::NavGoals constructor of NavGoals class. Two publishers corresponding to the waypoints and t...">NavGoals::NavGoals</a> constructor of <a class="el" href="classNavGoals.html" title="The NavGoals class In this class the waypoints are sent to the action client. They are also publihed ...">NavGoals</a> class. Two publishers corresponding to the waypoints and their markers are prepared for visualization purposes. The waypoints are fetched from an <a class="el" href="classXMLPoses.html" title="The XMLPoses class In this clas the waypoints are read from an XML file and saved into a vector...">XMLPoses</a> class object. </p>
+<p><a class="el" href="classNavGoals.html#ab09069b463473625bcfc6526384018c6" title="NavGoals::NavGoals constructor of NavGoals class. Two publishers corresponding to the waypoints and t...">NavGoals::NavGoals</a> constructor of <a class="el" href="classNavGoals.html" title="The NavGoals class In this class the waypoints are sent to the action client. They are also publihed ...">NavGoals</a> class. Two publishers corresponding to the waypoints and their markers are prepared for visualization purposes. The waypoints are fetched from an <a class="el" href="classXMLPoses.html" title="The XMLPoses class In this clas the waypoints are read from an XML file and saved into a vector...">XMLPoses</a> class object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_ac</td><td>move base client </td></tr>
@@ -610,6 +619,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad278eebbad9be819f291d0514cf7cc86"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NavGoals::m_sendGoals</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>flag that is set when the waypoints should be sent to the move base </p>
+
+</div>
+</div>
 <a class="anchor" id="a94d17d9ba3d1e5c4a72a6c6dcdd2056a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -659,7 +690,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Feb 1 2017 13:57:10 for Alexandros Sivris TAS contribution by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 3 2017 14:59:57 for Alexandros Sivris TAS contribution by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
