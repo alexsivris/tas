@@ -182,4 +182,4 @@ To run the node I prepared a launch file within the folder "object_detection/lau
 ### Dependencies ###
 *	ROS Indigo running under Linux (tested and developed under 16.04.01 LTS)
 *	OpenCV 3 (tested developed with OpenCV 3.2.0-dev)
-*	NOTE: because SIFT/SURF is not included in the default package of OpenCV 3.x, OpenCV has to be built with the `opencv_contrib` modules. Therefore, the GIT repo https://github.com/opencv/opencv_contrib has to be cloned and cmake has to be configured with the flag `OPENCV_EXTRA_MODULES_PATH` to  the "opencv_contrib/modules" directory. (See for example http://docs.opencv.org/3.1.0/de/d25/tutorial_dnn_build.html)
+*	NOTE: because SIFT/SURF (included by `<opencv2/xfeatures2d.hpp>`) is not included in the default package of OpenCV 3.x, OpenCV has to be built with the `opencv_contrib` modules. Therefore, the GIT repo https://github.com/opencv/opencv_contrib has to be cloned and cmake has to be configured with the flag `OPENCV_EXTRA_MODULES_PATH` to  the "opencv_contrib/modules" directory. (See for example http://docs.opencv.org/3.1.0/de/d25/tutorial_dnn_build.html)
