@@ -41,8 +41,6 @@ void LandmarkDetector::detectLandmarks(vector<string> files) {
         return;
     }
 
-    vector<int> foundCount(keypoints_vec.size());
-
     ros::NodeHandle nh;
     ros::Publisher msg_pub_;
     msg_pub_ = nh.advertise<object_detection::landmark>("landmarkDetection", 1);
@@ -81,8 +79,7 @@ void LandmarkDetector::detectLandmarks(vector<string> files) {
 
             // calculate homography matrix for the matched image points
             Mat H12 = findHomography( Mat(points1), Mat(points2), CV_RANSAC, ransacReprojThreshold);
-            const double det = H12.at<double>(0,0) * H12.at<double>(1,1) - H12.at<double>(1,0) * H12.at<double>(0,1);
-
+            
             points1.clear();points2.clear();
             KeyPoint::convert(keypoints_template, points1, queryIdxs);
             KeyPoint::convert(keypoints_cam, points2, trainIdxs);
@@ -92,8 +89,8 @@ void LandmarkDetector::detectLandmarks(vector<string> files) {
 
             vector<char> matchesMask( matches.size(), 0 );
             double maxInlierDist = ransacReprojThreshold < 0 ? 3 : ransacReprojThreshold;
-            int inliersCnt = 0;
-            Point2f center(0,0);
+            int inliersCnt = 0; // count inliers 
+            Point2f center(0,0); // variable for calculation center/moment of the detected template
             for( int i = 0; i < points1.size(); i++ ){
                 if( norm(points2[i] - points1t.at<Point2f>((int)i,0)) <= maxInlierDist ){ // inlier
                     matchesMask[i] = 1;
@@ -111,13 +108,13 @@ void LandmarkDetector::detectLandmarks(vector<string> files) {
 
                 // publish data on topic
                 object_detection::landmark msg;
-                msg.id = i;
-                msg.x = center.x;
-                msg.y = center.y;
+                msg.id = i; // template id
+                msg.x = center.x; // x-coordinate of the center (moment) of the detected template in the camera image
+                msg.y = center.y; // y-coordinate of the center (moment) of the detected template in the camera image
                 msg_pub_.publish(msg);
                 ros::spinOnce();
              }
-
+             
 #ifdef DRAW_MATCHES // draw matches and center of recognized landmark for debugging if wanted
                 Mat img_template = imread(files[i], CV_LOAD_IMAGE_GRAYSCALE);
                 Mat img_matches;
