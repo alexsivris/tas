@@ -15,7 +15,6 @@ In the following, we will present nodes that were written by members of group 1.
 *	slalom/include/slalom.h
 *	slalom/launch/slalom.launch
 *	slalom/nodes/slalom_node.cpp
-*	slalom/src/main.cpp
 *	slalom/src/slalom.cpp
 
 #### Description ####
