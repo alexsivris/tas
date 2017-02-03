@@ -152,6 +152,14 @@ In this file I did all the tests related to contour matching together with ORB i
 #### LandmarkDetector ####
 ![](object_detection/demo/SIFT_demo_matches.png) 
 
+#### Files ####
+*	object_detection/launch/landmarkdetector.launch
+*	object_detection/main.cpp
+*	object_detection/src/landmarkdetector.cpp
+*   object_detection/src/landmarkdetector.h
+*	object_detection/msg/landmark.msg
+*	object_detection/resources/
+
 ### Description ###
 This node is dedicated to our second task "Visual Localization". 
 
