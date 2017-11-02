@@ -37,7 +37,7 @@ To run the node we prepared a launch file called `slalom.launch` which is locate
 	0. Requirements
 	1. Visual localization
 	2. Map goals
-	3. Waypoint setter (unfinished)
+	3. Waypoint setter
 	
 2. Prototypes
 	1. Visual localization demo
