@@ -44,7 +44,7 @@ To run the node we prepared a launch file called `slalom.launch` which is locate
 	2. Template detection prototype using contours 
 	3. Template detection prototype using contours fusioned with ORB 
 	
-The complete documentation of the code can be seen [here](README_Alexandros_Sivris/doc/index.html) 
+The complete documentation of the code can be found [here](README_Alexandros_Sivris/doc) 
 
 ## 2.1.1 Navigation tools package ##
 ### Requirements ###
